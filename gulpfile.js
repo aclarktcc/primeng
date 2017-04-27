@@ -32,7 +32,7 @@ gulp.task('build-css-prod', function() {
 gulp.task('compile-components', ['clean'], function () {
   return gulp
     .src('components/**/*.ts')
-    .pipe(typescript.createProject('tsconfig.json'))
+    .pipe(typescript('tsconfig.json'))
     .pipe(gulp.dest('components'))
 });
 
