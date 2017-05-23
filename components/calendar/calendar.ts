@@ -1231,8 +1231,13 @@ export class Calendar implements AfterViewInit,OnInit,OnDestroy,ControlValueAcce
         let hours = date.getHours();
         let minutes = date.getMinutes();
         let seconds = date.getSeconds();
+<<<<<<< HEAD
 
         if(this.hourFormat == '12' && hours > 11 && hours != 12) {
+=======
+        this.pm = hours > 11;
+        if(this.hourFormat == '12' && this.pm && hours != 12) {
+>>>>>>> calendar-time
             hours-=12;
         }
 

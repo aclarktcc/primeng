@@ -1,4 +1,4 @@
-import {NgModule,Component,ViewChild,ElementRef,AfterViewInit,AfterContentInit,AfterViewChecked,DoCheck,Input,Output,EventEmitter,ContentChildren,QueryList,TemplateRef,IterableDiffers,Renderer,forwardRef} from '@angular/core';
+import {NgModule,Component,ViewChild,ElementRef,AfterViewInit,AfterContentInit,AfterViewChecked,Input,Output,EventEmitter,ContentChildren,QueryList,TemplateRef,Renderer,forwardRef,ChangeDetectorRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {InputTextModule} from '../inputtext/inputtext';
 import {ButtonModule} from '../button/button';
@@ -33,7 +33,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
                 </li>
             </ul
             ><button type="button" pButton icon="fa-fw fa-caret-down" class="ui-autocomplete-dropdown" [disabled]="disabled"
-                (click)="handleDropdownClick($event)" *ngIf="dropdown" (focus)="onDropdownFocus($event)" (blur)="onDropdownBlur($event)"></button>
+                (click)="handleDropdownClick($event)" *ngIf="dropdown"></button>
             <div #panel class="ui-autocomplete-panel ui-widget-content ui-corner-all ui-shadow" [style.display]="panelVisible ? 'block' : 'none'" [style.width]="appendTo ? 'auto' : '100%'" [style.max-height]="scrollHeight">
                 <ul class="ui-autocomplete-items ui-autocomplete-list ui-widget-content ui-widget ui-corner-all ui-helper-reset" *ngIf="panelVisible">
                     <li *ngFor="let option of suggestions; let idx = index" [ngClass]="{'ui-autocomplete-list-item ui-corner-all':true,'ui-state-highlight':(highlightOption==option)}"
@@ -51,7 +51,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
     },
     providers: [DomHandler,ObjectUtils,AUTOCOMPLETE_VALUE_ACCESSOR]
 })
-export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,ControlValueAccessor {
+export class AutoComplete implements AfterViewInit,AfterViewChecked,ControlValueAccessor {
     
     @Input() minLength: number = 1;
     
@@ -77,8 +77,6 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     
     @Input() size: number;
     
-    @Input() suggestions: any[];
-
     @Input() appendTo: any;
     
     @Input() autoHighlight: boolean;
@@ -123,6 +121,8 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     
     value: any;
     
+    _suggestions: any[];
+    
     onModelChange: Function = () => {};
     
     onModelTouched: Function = () => {};
@@ -142,26 +142,27 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     highlightOptionChanged: boolean;
     
     focus: boolean = false;
-    
-    dropdownFocus: boolean = false;
-    
+        
     filled: boolean;
     
     inputClick: boolean;
         
-    constructor(public el: ElementRef, public domHandler: DomHandler, differs: IterableDiffers, public renderer: Renderer, public objectUtils: ObjectUtils) {
-        this.differ = differs.find([]).create(null);
-    }
+    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer, public objectUtils: ObjectUtils, public cd: ChangeDetectorRef) {}
     
-    ngDoCheck() {
-        let changes = this.differ.diff(this.suggestions);
-        if(changes && this.panelEL.nativeElement) {
-            if(this.suggestions && this.suggestions.length) {
+    @Input() get suggestions(): any[] {
+        return this._suggestions;
+    }
+
+    set suggestions(val:any[]) {
+        this._suggestions = val;
+        
+        if(this.panelEL.nativeElement) {
+            if(this._suggestions && this._suggestions.length) {
                 this.show();
                 this.suggestionsUpdated = true;
                 
                 if(this.autoHighlight) {
-                    this.highlightOption = this.suggestions[0];
+                    this.highlightOption = this._suggestions[0];
                 }
             }
             else {
@@ -169,7 +170,7 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
             }
         }
     }
-    
+        
     ngAfterContentInit() {
         this.templates.forEach((item) => {
             switch(item.getType()) {
@@ -190,12 +191,12 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     
     ngAfterViewInit() {        
         this.documentClickListener = this.renderer.listenGlobal('body', 'click', () => {
-            if(this.inputClick) {
+            if(this.inputClick)
                 this.inputClick = false;
-            }
-            else {
+            else
                 this.hide();
-            }
+                
+            this.cd.markForCheck();
         });
 
         if(this.appendTo) {
@@ -297,14 +298,12 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
         
         this.onSelect.emit(option);
         
-        if(this.multiple)
-            this.multiInputEL.nativeElement.focus();
-        else
-            this.inputEL.nativeElement.focus();
+        this.focusInput();
     }
     
     show() {
-        if(!this.panelVisible && (this.focus||this.dropdownFocus)) {
+        let hasFocus = this.multiple ? document.activeElement == this.multiInputEL.nativeElement : document.activeElement == this.inputEL.nativeElement ;
+        if(!this.panelVisible && hasFocus) {
             this.panelVisible = true;
             this.panelEL.nativeElement.style.zIndex = ++DomHandler.zindex;
             this.domHandler.fadeIn(this.panelEL.nativeElement, 200);
@@ -323,10 +322,18 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     }
     
     handleDropdownClick(event) {
+        this.focusInput();
         this.onDropdownClick.emit({
             originalEvent: event,
             query: this.inputEL.nativeElement.value
         });
+    }
+    
+    focusInput() {
+        if(this.multiple)
+            this.multiInputEL.nativeElement.focus();
+        else
+            this.inputEL.nativeElement.focus();
     }
     
     removeItem(item: any) {
@@ -403,7 +410,7 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
             switch(event.which) {
                 //backspace
                 case 8:
-                    if(this.value && this.value.length && !this.inputEL.nativeElement.value) {
+                    if(this.value && this.value.length && !this.multiInputEL.nativeElement.value) {
                         this.value = [...this.value];
                         let removedValue = this.value.pop();
                         this.onUnselect.emit(removedValue);
@@ -424,20 +431,7 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
         this.onModelTouched();
         this.onBlur.emit(event);
     }
-    
-    onDropdownFocus() {
-        this.dropdownFocus = true;
         
-        if(this.multiple)
-            this.multiInputEL.nativeElement.focus();
-        else
-            this.inputEL.nativeElement.focus();
-    }
-    
-    onDropdownBlur() {
-        this.dropdownFocus = false;
-    }
-    
     isSelected(val: any): boolean {
         let selected: boolean = false;
         if(this.value && this.value.length) {
