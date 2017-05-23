@@ -1226,34 +1226,29 @@ export class Calendar implements AfterViewInit,OnInit,OnDestroy,ControlValueAcce
         if(!date) {
             return '';
         }
-
+        
         let output = '';
         let hours = date.getHours();
         let minutes = date.getMinutes();
         let seconds = date.getSeconds();
-<<<<<<< HEAD
-
-        if(this.hourFormat == '12' && hours > 11 && hours != 12) {
-=======
         this.pm = hours > 11;
         if(this.hourFormat == '12' && this.pm && hours != 12) {
->>>>>>> calendar-time
             hours-=12;
         }
-
+        
         output += (hours < 10) ? '0' + hours : hours;
         output += ':';
         output += (minutes < 10) ? '0' + minutes : minutes;
-
+        
         if(this.showSeconds) {
             output += ':';
             output += (seconds < 10) ? '0' + seconds : seconds;
         }
-
+        
         if(this.hourFormat == '12') {
-            output += hours > 11 ? ' PM' : ' AM';
+            output += this.pm ? ' PM' : ' AM';
         }
-
+        
         return output;
     }
 
