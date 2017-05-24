@@ -1,6 +1,6 @@
 {
   "name": "tcc-primeng",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
@@ -33,7 +33,5 @@
     "webpack-dev-server": "2.4.1",
     "webpack-merge": "^3.0.0"
   },
-  "dependencies": {
-    
-  }
+  "dependencies": {}
 }
