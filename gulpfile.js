@@ -52,9 +52,8 @@ gulp.task('images', function() {
 
 //Cleaning previous gulp tasks from project
 gulp.task('clean', function() {
-	del(['resources/primeng.css','resources/primeng.min.css','resources/images', 'components/**/*.js', 'components/**/*.d.ts', 'components/**/*.js.map','components/**/*.metadata.json']);
+	del(['resources/primeng.css','resources/primeng.min.css','resources/images']);
 });
-
 //Building project with run sequence
 gulp.task('build', ['clean','build-css-prod', 'images']);
 
