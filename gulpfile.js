@@ -59,3 +59,7 @@ gulp.task('build', ['clean','build-css-prod', 'images']);
 
 //Building project for npm deploy
 gulp.task('build-package', ['clean', 'build-css-prod', 'images', 'compile-components', 'compile-primeng']);
+
+gulp.task('deepclean', function() {
+	del(['resources/primeng.css','resources/primeng.min.css','resources/images','components/**/*.js', 'components/**/*.d.ts', 'components/**/*.js.map','components/**/*.metadata.json', 'aot/', 'dist/']);
+});
