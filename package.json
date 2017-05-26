@@ -1,6 +1,6 @@
 {
   "name": "tcc-primeng",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "scripts": {
     "ngc": "node --max-old-space-size=8192 node_modules/@angular/compiler-cli/src/main.js  -p tsconfig-aot.json",
     "tsc": "tsc",
