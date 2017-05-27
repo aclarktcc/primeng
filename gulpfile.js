@@ -6,7 +6,14 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     del = require('del'),
     flatten = require('gulp-flatten'),
-    typescript = require('gulp-typescript');
+    typescript = require('gulp-typescript'),
+    sass = require('gulp-sass');
+ 
+gulp.task('compile-theme-sass', function () {
+  return gulp.src('resources/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('resources'));
+});
 
 gulp.task('build-css', function() {
 	gulp.src([
@@ -55,7 +62,7 @@ gulp.task('clean', function() {
 	del(['resources/primeng.css','resources/primeng.min.css','resources/images']);
 });
 //Building project with run sequence
-gulp.task('build', ['clean','build-css-prod', 'images']);
+gulp.task('build', ['clean','compile-theme-sass','build-css-prod', 'images']);
 
 //Building project for npm deploy
 gulp.task('build-package', ['clean', 'build-css-prod', 'images', 'compile-components', 'compile-primeng']);
