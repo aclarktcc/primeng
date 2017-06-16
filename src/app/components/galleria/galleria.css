@@ -79,3 +79,8 @@
 .ui-galleria-panel-content {
     padding: 1em 1.4em;
 }
+
+.ui-galleria-frame-image {
+    max-width: 100%;
+    height: auto;
+}
