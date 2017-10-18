@@ -20,7 +20,7 @@
     <button type="button" (click)="clear()" pButton icon="fa-close" label="Clear"></button>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -165,13 +165,21 @@ export class MyModel &#123;
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>onChange</td>
-                        <td>event.originalEvent: browser event<br />
-                            event.value: single value or an array of values that are selected
-                        </td>
-                        <td>Callback to invoke when value changes.</td>
-                    </tr>
+                        <tr>
+                            <td>onChange</td>
+                            <td>event.originalEvent: browser event<br />
+                                event.value: single value or an array of values that are selected
+                            </td>
+                            <td>Callback to invoke when value changes.</td>
+                        </tr>
+                        <tr>
+                            <td>onOptionClick</td>
+                            <td>event.originalEvent: browser event<br />
+                                event.option: SelectItem instance of the clicked button<br />
+                                event.index: Index of the clicked button
+                            </td>
+                            <td>Callback to invoke when a button is clicked.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -181,6 +189,10 @@ export class MyModel &#123;
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/selectbutton" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;h3 class="first"&gt;Single&lt;/h3&gt;

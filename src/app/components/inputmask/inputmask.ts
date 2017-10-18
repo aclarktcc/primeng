@@ -40,8 +40,8 @@ export const INPUTMASK_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'p-inputMask',
     template: `<input #input pInputText [attr.id]="inputId" [attr.type]="type" [attr.name]="name" [ngStyle]="style" [ngClass]="styleClass" [attr.placeholder]="placeholder"
-        [attr.size]="size" [attr.maxlength]="maxlength" [attr.tabindex]="tabindex" [disabled]="disabled" [readonly]="readonly"
-        (focus)="onFocus($event)" (blur)="onInputBlur($event)" (keydown)="onKeyDown($event)" (keypress)="onKeyPress($event)"
+        [attr.size]="size" [attr.maxlength]="maxlength" [attr.tabindex]="tabindex" [disabled]="disabled" [readonly]="readonly" [attr.required]="required"
+        (focus)="onInputFocus($event)" (blur)="onInputBlur($event)" (keydown)="onKeyDown($event)" (keypress)="onKeyPress($event)"
         (input)="onInput($event)" (paste)="handleInputChange($event)">`,
     host: {
         '[class.ui-inputwrapper-filled]': 'filled',
@@ -50,9 +50,7 @@ export const INPUTMASK_VALUE_ACCESSOR: any = {
     providers: [INPUTMASK_VALUE_ACCESSOR,DomHandler]
 })
 export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
-
-    @Input() mask: string;
-
+    
     @Input() type: string = 'text';
     
     @Input() slotChar: string = '_';
@@ -81,13 +79,19 @@ export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
     
     @Input() name: string;
     
+    @Input() required: boolean;
+    
     @ViewChild('input') inputViewChild: ElementRef;
     
     @Output() onComplete: EventEmitter<any> = new EventEmitter();
         
+    @Output() onFocus: EventEmitter<any> = new EventEmitter();
+        
     @Output() onBlur: EventEmitter<any> = new EventEmitter();
         
     value: any;
+    
+    _mask: string;
     
     onModelChange: Function = () => {};
     
@@ -126,6 +130,25 @@ export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
     constructor(public el: ElementRef, public domHandler: DomHandler) {}
         
     ngOnInit() {
+        let ua = this.domHandler.getUserAgent();
+        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
+        
+        this.initMask();
+    }
+    
+    @Input() get mask(): string {
+        return this._mask;
+    }
+    
+    set mask(val:string) { 
+        this._mask = val;
+        
+        this.initMask();
+        this.writeValue('');
+        this.onModelChange(this.value);
+    }
+    
+    initMask() {
         this.tests = [];
         this.partialPosition = this.mask.length;
         this.len = this.mask.length;
@@ -135,9 +158,6 @@ export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
             'a': '[A-Za-z]',
             '*': '[A-Za-z0-9]'
         };
-        
-        let ua = this.domHandler.getUserAgent();
-        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
         
         let maskTokens = this.mask.split('');
         for(let i = 0; i < maskTokens.length; i++) {
@@ -508,7 +528,7 @@ export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
         return (this.partialPosition ? i : this.firstNonMaskPos);
     }
     
-    onFocus(event) {
+    onInputFocus(event) {
         if (this.readonly){
             return;
         }
@@ -533,6 +553,8 @@ export class InputMask implements OnInit,OnDestroy,ControlValueAccessor {
                 this.caret(pos);
             }
         }, 10);
+        
+        this.onFocus.emit(event);
     }
     
     onInput(event) {         

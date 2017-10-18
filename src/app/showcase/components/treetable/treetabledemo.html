@@ -66,21 +66,7 @@
         <p-column field="size" header="Size"></p-column>
         <p-column field="type" header="Type"></p-column>
     </p-treeTable>
-    
-    <p-treeTable [value]="files7" resizableColumns="true" [style]="{'margin-top':'50px'}">
-        <p-header>Resizable Columns</p-header>
-        <p-column field="name" header="Name"></p-column>
-        <p-column field="size" header="Size"></p-column>
-        <p-column field="type" header="Type"></p-column>
-    </p-treeTable>
-    
-    <p-treeTable [value]="files8" resizableColumns="true" columnResizeMode="expand" [style]="{'margin-top':'50px'}">
-        <p-header>Resizable Columns with Expand Mode</p-header>
-        <p-column field="name" header="Name"></p-column>
-        <p-column field="size" header="Size"></p-column>
-        <p-column field="type" header="Type"></p-column>
-    </p-treeTable>
-    
+            
     <p-contextMenu #cm [model]="items"></p-contextMenu>
     
     <p-treeTable [value]="lazyFiles" [style]="{'margin-top':'50px'}"
@@ -92,7 +78,7 @@
     </p-treeTable>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -499,33 +485,6 @@ export class TreeTableDemoComponent implements OnInit &#123;
 
             <p>Selection of a particular node can be disabled by setting the selectable property of the node to false.</p>
             
-            <h3>Column Resize</h3>
-            <p>Columns can be resized using drag drop by setting the resizableColumns to true. There are two resize modes; "fit" and "expand". Fit is the default one and 
-            the overall table width does not change when a column is resized. In "expand" mode, table width also changes along with the column width. onColumnResize
-            is a callback that passes the resized column header as a parameter.</p>
-            
-<pre>
-<code class="language-markup" pCode ngNonBindable>
-&lt;p-treeTable [value]="files" [resizableColumns]="true"&gt;
-    &lt;p-header&gt;Resizable Columns&lt;/p-header&gt;
-    &lt;p-column field="name" header="Name"&gt;&lt;/p-column&gt;
-    &lt;p-column field="size" header="Size"&gt;&lt;/p-column&gt;
-    &lt;p-column field="type" header="Type"&gt;&lt;/p-column&gt;
-&lt;/p-treeTable&gt;
-</code>
-</pre>
-
-<pre>
-<code class="language-markup" pCode ngNonBindable>
-&lt;p-treeTable [value]="files" [resizableColumns]="true" columnResizeMode="expand"&gt;
-    &lt;p-header&gt;Resizable Columns&lt;/p-header&gt;
-    &lt;p-column field="name" header="Name"&gt;&lt;/p-column&gt;
-    &lt;p-column field="size" header="Size"&gt;&lt;/p-column&gt;
-    &lt;p-column field="type" header="Type"&gt;&lt;/p-column&gt;
-&lt;/p-treeTable&gt;
-</code>
-</pre>
-            
             <h3>ContextMenu</h3>
             <p>TreeTable has exclusive integration with contextmenu component. In order to attach a menu to a treetable, define a local template
             variable for the menu and bind it to the contextMenu property of the treetable. This enables showing the menu whenever a row is right clicked.</p>
@@ -585,14 +544,14 @@ export class TreeTableDemoComponent implements OnInit &#123;
 <code class="language-markup" pCode ngNonBindable>
 &lt;h3&gt;ng-template&lt;/h3&gt;
 &lt;p-treeTable [value]="files"&gt;
-    &lt;p:column&gt;
+    &lt;p-column&gt;
         &lt;ng-template let-col let-node="rowData" pTemplate="header"&gt;
             &lt;button type="button" pButton label="Refresh"&gt;&lt;/button&gt;
         &lt;/ng-template&gt;
         &lt;ng-template let-col let-node="rowData" pTemplate="body"&gt;
             &lt;input [(ngModel)]="node.data.name" type="text" style="width:100%"&gt;
         &lt;/ng-template&gt;
-    &lt;/p:column&gt;
+    &lt;/p-column&gt;
 &lt;/p-treeTable&gt;
 </code>
 </pre>
@@ -692,28 +651,28 @@ export class TreeTableDemoComponent implements OnInit &#123;
                             <td>Tooltip and screenreader text for collapse icon.</td>
                         </tr>
                         <tr>
+                           <td>expandedIcon</td>
+                           <td>string</td>
+                           <td>fa-caret-down</td>
+                           <td>Icon to display on an expanded node.</td>
+                       </tr>
+                        <tr>
+                           <td>collapsedIcon</td>
+                           <td>string</td>
+                           <td>fa-caret-right</td>
+                           <td>Icon to display on an expanded node.</td>
+                       </tr>
+                        <tr>
                             <td>selectionMode</td>
                             <td>string</td>
                             <td>null</td>
-                            <td>Defines the selection mode, valid values "single" and "multiple".</td>
+                            <td>Defines the selection mode, valid values are "single", "multiple" and "checkbox".</td>
                         </tr>
                         <tr>
                             <td>selection</td>
                             <td>any</td>
                             <td>null</td>
                             <td>A single treenode instance or an array to refer to the selections.</td>
-                        </tr>
-                        <tr>
-                            <td>resizableColumns</td>
-                            <td>boolean</td>
-                            <td>false</td>
-                            <td>When enabled, columns can be resized using drag and drop.</td>
-                        </tr>
-                        <tr>
-                            <td>columnResizeMode</td>
-                            <td>string</td>
-                            <td>fit</td>
-                            <td>Defines whether the overall table width should change on column resize, valid values are "fit" and "expand".</td>
                         </tr>
                         <tr>
                             <td>style</td>
@@ -733,6 +692,24 @@ export class TreeTableDemoComponent implements OnInit &#123;
                             <td>true</td>
                             <td>Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item
                             can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically.</td>
+                        </tr>
+                        <tr>
+                            <td>toggleColumnIndex</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>Index of the column that contains the toggler element.</td>
+                        </tr>
+                        <tr>
+                            <td>tableStyle</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Inline style of the table element.</td>
+                        </tr>
+                        <tr>
+                            <td>tableStyleClass</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Style class of the table element.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -780,10 +757,10 @@ export class TreeTableDemoComponent implements OnInit &#123;
                             <td>Callback to invoke when a node is selected with right click.</td>
                         </tr>
                         <tr>
-                            <td>onColResize</td>
-                            <td>event.element: Resized column header <br>
-                                event.delta: Change of width in number of pixels</td>
-                            <td>Callback to invoke when a column is resized.</td>
+                            <td>onRowDblclick</td>
+                            <td>event.originalEvent: Browser event <br>
+                                event.node: Selected node instance.</td>
+                            <td>Callback to invoke when a row is double clicked.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -825,6 +802,10 @@ export class TreeTableDemoComponent implements OnInit &#123;
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/treetable" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;p-growl [value]="msgs"&gt;&lt;/p-growl&gt;
@@ -888,20 +869,6 @@ export class TreeTableDemoComponent implements OnInit &#123;
     &lt;p-column field="type" header="Type"&gt;&lt;/p-column&gt;
 &lt;/p-treeTable&gt;
 
-&lt;p-treeTable [value]="files7" [resizableColumns]="true"&gt;
-    &lt;p-header&gt;Resizable Columns&lt;/p-header&gt;
-    &lt;p-column field="name" header="Name"&gt;&lt;/p-column&gt;
-    &lt;p-column field="size" header="Size"&gt;&lt;/p-column&gt;
-    &lt;p-column field="type" header="Type"&gt;&lt;/p-column&gt;
-&lt;/p-treeTable&gt;
-
-&lt;p-treeTable [value]="files8" [resizableColumns]="true" columnResizeMode="expand"&gt;
-    &lt;p-header&gt;Resizable Columns with expand mode&lt;/p-header&gt;
-    &lt;p-column field="name" header="Name"&gt;&lt;/p-column&gt;
-    &lt;p-column field="size" header="Size"&gt;&lt;/p-column&gt;
-    &lt;p-column field="type" header="Type"&gt;&lt;/p-column&gt;
-&lt;/p-treeTable&gt;
-
 &lt;p-treeTable [value]="lazyFiles" [style]="&#123;'margin-top':'50px'&#125;"
     (onNodeExpand)="nodeExpand($event)"&gt;
     &lt;p-header&gt;Lazy Loading&lt;/p-header&gt;
@@ -929,11 +896,7 @@ export class TreeTableDemo implements OnInit &#123;
     files5: TreeNode[];
     
     files6: TreeNode[];
-    
-    files7: TreeNode[];
-    
-    files8: TreeNode[];
-    
+            
     lazyFiles: TreeNode[];
         
     selectedFile: TreeNode;
@@ -941,11 +904,20 @@ export class TreeTableDemo implements OnInit &#123;
     selectedFile2: TreeNode;
     
     selectedFiles: TreeNode[];
+    
+    selectedFiles2: TreeNode[];
+    
+    items: MenuItem[];
         
     constructor(private nodeService: NodeService) &#123; &#125;
 
     ngOnInit() &#123;
-        this.nodeService.getFilesystem().then(files => this.files = files);
+        this.nodeService.getFilesystem().then(files => this.files1 = files);
+        this.nodeService.getFilesystem().then(files => this.files2 = files);
+        this.nodeService.getFilesystem().then(files => this.files3 = files);
+        this.nodeService.getFilesystem().then(files => this.files4 = files);
+        this.nodeService.getFilesystem().then(files => this.files5 = files);
+        this.nodeService.getFilesystem().then(files => this.files6 = files);
         this.nodeService.getLazyFilesystem().then(files => this.lazyFiles = files);
         
         this.items = [
@@ -980,8 +952,7 @@ export class TreeTableDemo implements OnInit &#123;
         node.parent.children = node.parent.children.filter( n => n.data !== node.data);
         this.msgs = [];
         this.msgs.push(&#123;severity: 'info', summary: 'Node Deleted', detail: node.data.name&#125;);
-    &#126;
-    
+    &#125;
 &#125;
 </code>
 </pre>

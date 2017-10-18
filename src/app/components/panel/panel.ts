@@ -8,7 +8,7 @@ import {trigger,state,style,transition,animate} from '@angular/animations';
     selector: 'p-panel',
     template: `
         <div [ngClass]="'ui-panel ui-widget ui-widget-content ui-corner-all'" [ngStyle]="style" [class]="styleClass">
-            <div class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+            <div class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all" *ngIf="showHeader">
                 <span class="ui-panel-title" *ngIf="header">{{header}}</span>
                 <ng-content select="p-header"></ng-content>
                 <a *ngIf="toggleable" class="ui-panel-titlebar-icon ui-panel-titlebar-toggler ui-corner-all ui-state-default" href="#"
@@ -21,9 +21,10 @@ import {trigger,state,style,transition,animate} from '@angular/animations';
                 <div class="ui-panel-content ui-widget-content">
                     <ng-content></ng-content>
                 </div>
-            </div>
-            <div class="ui-panel-footer ui-widget-content" *ngIf="footerFacet">
-                <ng-content select="p-footer"></ng-content>
+                
+                <div class="ui-panel-footer ui-widget-content" *ngIf="footerFacet">
+                    <ng-content select="p-footer"></ng-content>
+                </div>
             </div>
         </div>
     `,
@@ -48,12 +49,14 @@ export class Panel implements BlockableUI {
     @Input() collapsed: boolean = false;
     
     @Input() style: any;
-        
+    
     @Input() styleClass: string;
     
     @Input() expandIcon: string = 'fa-plus';
     
     @Input() collapseIcon: string = 'fa-minus';
+  
+    @Input() showHeader: boolean = true;
     
     @Output() collapsedChange: EventEmitter<any> = new EventEmitter();
 
@@ -62,7 +65,7 @@ export class Panel implements BlockableUI {
     @Output() onAfterToggle: EventEmitter<any> = new EventEmitter();
     
     @ContentChild(Footer) footerFacet;
-        
+    
     public animating: boolean;
     
     constructor(private el: ElementRef) {}
@@ -75,15 +78,13 @@ export class Panel implements BlockableUI {
         this.animating = true;
         this.onBeforeToggle.emit({originalEvent: event, collapsed: this.collapsed});
         
-        if(this.toggleable) {            
+        if(this.toggleable) {
             if(this.collapsed)
                 this.expand(event);
             else
                 this.collapse(event);
         }
         
-        this.onAfterToggle.emit({originalEvent: event, collapsed: this.collapsed});   
-                
         event.preventDefault();
     }
     
@@ -103,6 +104,7 @@ export class Panel implements BlockableUI {
     
     onToggleDone(event: Event) {
         this.animating = false;
+        this.onAfterToggle.emit({originalEvent: event, collapsed: this.collapsed});
     }
 
 }

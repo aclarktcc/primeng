@@ -9,14 +9,14 @@
 <div class="content-section implementation">
     <p-growl [value]="msgs"></p-growl>
     
-    <p-confirmDialog width="425"></p-confirmDialog>
+    <p-confirmDialog></p-confirmDialog>
 
     <button type="button" (click)="confirm1()" pButton icon="fa-check" label="Confirm"></button>
     
     <button type="button" (click)="confirm2()" pButton icon="fa-trash" label="Delete"></button>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -293,11 +293,15 @@ export class ConfirmDialogDemo &#123;
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/confirmdialog" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;p-growl [value]="msgs"&gt;&lt;/p-growl&gt;
     
-&lt;p-confirmDialog width="425"&gt;&lt;/p-confirmDialog&gt;
+&lt;p-confirmDialog&gt;&lt;/p-confirmDialog&gt;
 
 &lt;button type="button" (click)="confirm1()" pButton icon="fa-check" label="Confirm"&gt;&lt;/button&gt;
 
@@ -319,22 +323,28 @@ export class ConfirmDialogDemo &#123;
 
     confirm1() &#123;
         this.confirmationService.confirm(&#123;
-            message: 'Are you sure that you want to perform this action?',
+            message: 'Are you sure that you want to proceed?',
+            header: 'Confirmation',
+            icon: 'fa fa-question-circle',
             accept: () => &#123;
-                this.msgs = [];
-                this.msgs.push(&#123;severity:'info', summary:'Confirmed', detail:'You have accepted'&#125;);
+                this.msgs = [&#123;severity:'info', summary:'Confirmed', detail:'You have accepted'&#125;];
+            &#125;,
+            reject: () => &#123;
+                this.msgs = [&#123;severity:'info', summary:'Rejected', detail:'You have rejected'&#125;];
             &#125;
         &#125;);
     &#125;
-    
+
     confirm2() &#123;
         this.confirmationService.confirm(&#123;
             message: 'Do you want to delete this record?',
             header: 'Delete Confirmation',
             icon: 'fa fa-trash',
             accept: () => &#123;
-                this.msgs = [];
-                this.msgs.push(&#123;severity:'info', summary:'Confirmed', detail:'Record deleted'&#125;);
+                this.msgs = [&#123;severity:'info', summary:'Confirmed', detail:'Record deleted'&#125;];
+            &#125;,
+            reject: () => &#123;
+                this.msgs = [&#123;severity:'info', summary:'Rejected', detail:'You have rejected'&#125;];
             &#125;
         &#125;);
     &#125;

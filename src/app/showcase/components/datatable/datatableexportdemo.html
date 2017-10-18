@@ -2,17 +2,18 @@
 
 <div class="content-section introduction">
     <div>
-        <span class="feature-title">DataTable - <span class="subitem">Export</span></span>
+        <span class="feature-title">DataTable - Export</span>
         <span>DataTable can export its data to CSV format.</span>
     </div>
 </div>
 
 <div class="content-section implementation">
     
-    <p-dataTable #dt [value]="cars" exportFilename="cars">
+    <p-dataTable #dt [value]="cars" exportFilename="cars" [(selection)]="selectedCars" selectionMode="multiple" [metaKeySelection]="false">
         <p-header>
             <div class="ui-helper-clearfix">
-                <button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"></button>
+                <button type="button" pButton icon="fa-file-o" iconPos="left" label="All Data" (click)="dt.exportCSV()" style="float:left"></button>
+                <button type="button" pButton icon="fa-file" iconPos="left" label="Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button>
             </div>
         </p-header>
         <p-column field="vin" header="Vin"></p-column>
@@ -23,14 +24,20 @@
     
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="datatableexportdemo.ts">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/datatable/datatableexportdemo.ts" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-typescript" pCode ngNonBindable>
 export class DataTableExportDemo implements OnInit &#123;
 
     cars: Car[];
+    
+    selectedCars: Car[];
 
     constructor(private carService: CarService) &#123; &#125;
 
@@ -44,12 +51,17 @@ export class DataTableExportDemo implements OnInit &#123;
         </p-tabPanel>
 
         <p-tabPanel header="datatableexportdemo.html">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/datatable/datatableexportdemo.html" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
-&lt;p-dataTable #dt [value]="cars" exportFilename="cars"&gt;
+&lt;p-dataTable #dt [value]="cars" exportFilename="cars" [(selection)]="selectedCars" selectionMode="multiple" [metaKeySelection]="false"&gt;
     &lt;p-header&gt;
         &lt;div class="ui-helper-clearfix"&gt;
-            &lt;button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"&gt;&lt;/button&gt;
+            &lt;button type="button" pButton icon="fa-file-o" iconPos="left" label="All Data" (click)="dt.exportCSV()" style="float:left"&gt;&lt;/button&gt;
+            &lt;button type="button" pButton icon="fa-file" iconPos="left" label="Selection Only" (click)="dt.exportCSV(&#123;selectionOnly:true&#125;)" style="float:right"&gt;&lt;/button&gt;
         &lt;/div&gt;
     &lt;/p-header&gt;
     &lt;p-column field="vin" header="Vin"&gt;&lt;/p-column&gt;

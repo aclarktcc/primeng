@@ -14,7 +14,7 @@
     <button #btn type="button" pButton icon="fa fa-list" label="Show" (click)="menu.toggle($event)"></button>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -39,7 +39,7 @@ import &#123;SlideMenuModule,MenuItem&#125; from 'primeng/primeng';
 <code class="language-typescript" pCode ngNonBindable>
 export class SlideMenuDemo &#123;
 
-    private items: MenuItem[];
+    items: MenuItem[];
 
     ngOnInit() &#123;
         this.items = [
@@ -136,27 +136,33 @@ export class SlideMenuDemo &#123;
                         <tr>
                             <td>effectDuration</td>
                             <td>any</td>
-                            <td>500</td>
+                            <td>250</td>
                             <td>Duration of the sliding animation in milliseconds.</td>
                         </tr>
                         <tr>
-                           <td>backLabel</td>
-                           <td>string</td>
-                           <td>Back</td>
-                           <td>Label of element to navigate back.</td>
-                       </tr>
-                       <tr>
-                          <td>menuWidth</td>
-                          <td>number</td>
-                          <td>180</td>
-                          <td>Width of the submenus.</td>
-                      </tr>
-                      <tr>
-                         <td>viewportHeight</td>
-                         <td>number</td>
-                         <td>175</td>
-                         <td>Height of the scrollable area, a scrollbar appears if a menu height is longer than this value.</td>
-                     </tr>
+                            <td>backLabel</td>
+                            <td>string</td>
+                            <td>Back</td>
+                            <td>Label of element to navigate back.</td>
+                        </tr>
+                        <tr>
+                            <td>menuWidth</td>
+                            <td>number</td>
+                            <td>180</td>
+                            <td>Width of the submenus.</td>
+                        </tr>
+                        <tr>
+                            <td>viewportHeight</td>
+                            <td>number</td>
+                            <td>175</td>
+                            <td>Height of the scrollable area, a scrollbar appears if a menu height is longer than this value.</td>
+                        </tr>
+                        <tr>
+                            <td>appendTo</td>
+                            <td>any</td>
+                            <td>null</td>
+                            <td>Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -247,6 +253,10 @@ export class SlideMenuDemo &#123;
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/slidemenu" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;h3 class="first"&gt;Default&lt;/h3&gt;
@@ -262,7 +272,7 @@ export class SlideMenuDemo &#123;
 <code class="language-typescript" pCode ngNonBindable>
 export class SlideMenuDemo &#123;
 
-    private items: MenuItem[];
+    items: MenuItem[];
 
     ngOnInit() &#123;
         this.items = [
@@ -278,6 +288,7 @@ export class SlideMenuDemo &#123;
                         ]
                     &#125;,
                     &#123;label: 'Open'&#125;,
+                    &#123;separator:true&#125;,
                     &#123;label: 'Quit'&#125;
                 ]
             &#125;,
@@ -335,6 +346,7 @@ export class SlideMenuDemo &#123;
                     &#125;
                 ]
             &#125;,
+            &#123;separator:true&#125;,
             &#123;
                 label: 'Quit', icon: 'fa-minus'
             &#125;

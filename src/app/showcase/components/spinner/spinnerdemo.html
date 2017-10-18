@@ -19,7 +19,7 @@
     <p-spinner size="30" [(ngModel)]="val4" [disabled]="true"></p-spinner>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -151,6 +151,18 @@ import &#123;SpinnerModule&#125; from 'primeng/primeng';
                             <td>null</td>
                             <td>Identifier of the focus input to match a label defined for the component.</td>
                         </tr>
+                        <tr>
+                            <td>type</td>
+                            <td>string</td>
+                            <td>text</td>
+                            <td>Type of the input field.</td>
+                        </tr>
+                        <tr>
+                            <td>required</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When present, it specifies that an input field must be filled out before submitting the form.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -169,8 +181,13 @@ import &#123;SpinnerModule&#125; from 'primeng/primeng';
                         <tr>
                             <td>onBlur</td>
                             <td>event: Blur event</td>
-                            <td>Callback to invoke when autocomplete loses focus.</td>
-                        </tr>                        
+                            <td>Callback to invoke when input loses focus.</td>
+                        </tr>       
+                        <tr>
+                            <td>onFocus</td>
+                            <td>event: Browser event</td>
+                            <td>Callback to invoke when input gets focus.</td>
+                        </tr>                 
                         <tr>
                             <td>onChange</td>
                             <td>event: Change event</td>
@@ -212,6 +229,10 @@ import &#123;SpinnerModule&#125; from 'primeng/primeng';
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/spinner" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;h3 class="first"&gt;Basic&lt;/h3&gt;

@@ -41,7 +41,7 @@
     
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
             <h3>Import</h3>
@@ -194,6 +194,12 @@ import &#123;InputMaskModule&#125; from 'primeng/primeng';
                             <td>null</td>
                             <td>Identifier of the focus input to match a label defined for the component.</td>
                         </tr>
+                        <tr>
+                            <td>required</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When present, it specifies that an input field must be filled out before submitting the form.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -209,6 +215,11 @@ import &#123;InputMaskModule&#125; from 'primeng/primeng';
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>onFocus</td>
+                            <td>event: Browser event</td>
+                            <td>Callback to invoke when input receives focus.</td>
+                        </tr> 
                         <tr>
                             <td>onBlur</td>
                             <td>event: Browser event</td>
@@ -231,6 +242,10 @@ import &#123;InputMaskModule&#125; from 'primeng/primeng';
         </p-tabPanel>
 
         <p-tabPanel header="Source">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/inputmask" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
 &lt;div class="ui-g ui-fluid"&gt;

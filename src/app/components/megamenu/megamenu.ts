@@ -1,4 +1,4 @@
-import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,EventEmitter} from '@angular/core';
+import {NgModule,Component,ElementRef,AfterViewInit,Input,Output,Renderer2} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DomHandler} from '../dom/domhandler';
 import {MenuItem} from '../common/menuitem';
@@ -12,7 +12,8 @@ import {RouterModule} from '@angular/router';
             [ngClass]="{'ui-menu ui-menubar ui-megamenu ui-widget ui-widget-content ui-corner-all ui-helper-clearfix':true,'ui-megamenu-vertical': orientation == 'vertical'}">
             <ul class="ui-menu-list ui-helper-reset ui-menubar-root-list">
                 <ng-template ngFor let-category [ngForOf]="model">
-                    <li #item [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':category.items,'ui-menuitem-active':item==activeItem}"
+                    <li *ngIf="category.separator" class="ui-menu-separator ui-widget-content">
+                    <li *ngIf="!category.separator" #item [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':category.items,'ui-menuitem-active':item==activeItem}"
                         (mouseenter)="onItemMouseEnter($event, item, category)" (mouseleave)="onItemMouseLeave($event, item)">
                         <a class="ui-menuitem-link ui-corner-all ui-submenu-link" [ngClass]="{'ui-state-disabled':category.disabled}">
                             <span class="ui-menuitem-icon fa fa-fw" [ngClass]="category.icon"></span>
@@ -26,18 +27,23 @@ import {RouterModule} from '@angular/router';
                                         <ng-template ngFor let-submenu [ngForOf]="column">
                                             <ul class="ui-menu-list ui-helper-reset">
                                                 <li class="ui-widget-header ui-corner-all"><h3>{{submenu.label}}</h3></li>
-                                                <li *ngFor="let item of submenu.items" class="ui-menuitem ui-widget ui-corner-all">
-                                                    <a *ngIf="!item.routerLink" [href]="item.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="item.target"
-                                                        [ngClass]="{'ui-state-disabled':item.disabled}" (click)="itemClick($event, item)">
-                                                        <span class="ui-menuitem-icon fa fa-fw" *ngIf="item.icon" [ngClass]="item.icon"></span>
-                                                        <span class="ui-menuitem-text">{{item.label}}</span>
-                                                    </a>
-                                                    <a *ngIf="item.routerLink" [routerLink]="item.routerLink" [routerLinkActive]="'ui-state-active'" [routerLinkActiveOptions]="item.routerLinkActiveOptions||{exact:false}" class="ui-menuitem-link ui-corner-all" [attr.target]="item.target"
-                                                        [ngClass]="{'ui-state-disabled':item.disabled}" (click)="itemClick($event, item)">
-                                                        <span class="ui-menuitem-icon fa fa-fw" *ngIf="item.icon" [ngClass]="item.icon"></span>
-                                                        <span class="ui-menuitem-text">{{item.label}}</span>
-                                                    </a>
-                                                </li>
+                                                <ng-template ngFor let-item [ngForOf]="submenu.items">
+                                                    <li *ngIf="item.separator" class="ui-menu-separator ui-widget-content">
+                                                    <li *ngIf="!item.separator" class="ui-menuitem ui-widget ui-corner-all">
+                                                        <a *ngIf="!item.routerLink" [href]="item.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="item.target" [attr.title]="item.title"
+                                                            [ngClass]="{'ui-state-disabled':item.disabled}" (click)="itemClick($event, item)">
+                                                            <span class="ui-menuitem-icon fa fa-fw" *ngIf="item.icon" [ngClass]="item.icon"></span>
+                                                            <span class="ui-menuitem-text">{{item.label}}</span>
+                                                        </a>
+                                                        <a *ngIf="item.routerLink" [routerLink]="item.routerLink" [routerLinkActive]="'ui-state-active'" 
+                                                            [routerLinkActiveOptions]="item.routerLinkActiveOptions||{exact:false}" class="ui-menuitem-link ui-corner-all" 
+                                                             [attr.target]="item.target" [attr.title]="item.title"
+                                                            [ngClass]="{'ui-state-disabled':item.disabled}" (click)="itemClick($event, item)">
+                                                            <span class="ui-menuitem-icon fa fa-fw" *ngIf="item.icon" [ngClass]="item.icon"></span>
+                                                            <span class="ui-menuitem-text">{{item.label}}</span>
+                                                        </a>
+                                                    </li>
+                                                </ng-template>
                                             </ul>
                                         </ng-template>
                                     </div>
@@ -46,12 +52,15 @@ import {RouterModule} from '@angular/router';
                         </div>
                     </li>
                 </ng-template>
+                <li class="ui-menuitem ui-menuitem-custom ui-widget ui-corner-all" *ngIf="orientation === 'horizontal'">
+                    <ng-content></ng-content>
+                </li>
             </ul>
         </div>
     `,
     providers: [DomHandler]
 })
-export class MegaMenu implements OnDestroy {
+export class MegaMenu {
 
     @Input() model: MenuItem[];
 
@@ -101,38 +110,13 @@ export class MegaMenu implements OnDestroy {
         }
         
         if(item.command) {
-            if(!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
         }
                         
         this.activeItem = null;
-    }
-    
-    unsubscribe(item: any) {
-        if(item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        
-        if(item.items) {
-            for(let childItem of item.items) {
-                this.unsubscribe(childItem);
-            }
-        }
-    }
-    
-    ngOnDestroy() {        
-        if(this.model) {
-            for(let item of this.model) {
-                this.unsubscribe(item);
-            }
-        }
     }
     
     getColumnClass(menuitem: MenuItem) {

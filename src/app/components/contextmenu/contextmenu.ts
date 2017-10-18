@@ -1,4 +1,4 @@
-import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,EventEmitter,Inject,forwardRef,ViewChild} from '@angular/core';
+import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,Inject,forwardRef,ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DomHandler} from '../dom/domhandler';
 import {MenuItem} from '../common/menuitem';
@@ -11,16 +11,19 @@ import {RouterModule} from '@angular/router';
         <ul [ngClass]="{'ui-helper-reset':root, 'ui-widget-content ui-corner-all ui-helper-clearfix ui-menu-child ui-shadow':!root}" class="ui-menu-list"
             (click)="listClick($event)">
             <ng-template ngFor let-child [ngForOf]="(root ? item : item.items)">
-                <li #item [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-menuitem-active':item==activeItem}"
+                <li *ngIf="child.separator" class="ui-menu-separator ui-widget-content">
+                <li *ngIf="!child.separator" #item [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-menuitem-active':item==activeItem}"
                     (mouseenter)="onItemMouseEnter($event,item,child)" (mouseleave)="onItemMouseLeave($event,item)" [style.display]="child.visible === false ? 'none' : 'block'">
-                    <a *ngIf="!child.routerLink" [href]="child.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="child.target"
-                        [ngClass]="{'ui-state-disabled':child.disabled}" (click)="itemClick($event, child)">
+                    <a *ngIf="!child.routerLink" [href]="child.url||'#'" [attr.target]="child.target" [attr.title]="child.title" (click)="itemClick($event, child)"
+                        [ngClass]="{'ui-menuitem-link ui-corner-all':true,'ui-state-disabled':child.disabled}" [ngStyle]="child.style" [class]="child.styleClass">
                         <span class="ui-submenu-icon fa fa-fw fa-caret-right" *ngIf="child.items"></span>
                         <span class="ui-menuitem-icon fa fa-fw" *ngIf="child.icon" [ngClass]="child.icon"></span>
                         <span class="ui-menuitem-text">{{child.label}}</span>
                     </a>
-                    <a *ngIf="child.routerLink" [routerLink]="child.routerLink" [routerLinkActive]="'ui-state-active'" [routerLinkActiveOptions]="child.routerLinkActiveOptions||{exact:false}" class="ui-menuitem-link ui-corner-all" [attr.target]="child.target"
-                        [ngClass]="{'ui-state-disabled':child.disabled}" (click)="itemClick($event, child)">
+                    <a *ngIf="child.routerLink" [routerLink]="child.routerLink" [routerLinkActive]="'ui-state-active'" 
+                        [routerLinkActiveOptions]="child.routerLinkActiveOptions||{exact:false}" [attr.target]="child.target" [attr.title]="child.title"
+                        (click)="itemClick($event, child)" [ngClass]="{'ui-menuitem-link ui-corner-all':true,'ui-state-disabled':child.disabled}" 
+                        [ngStyle]="child.style" [class]="child.styleClass">
                         <span class="ui-submenu-icon fa fa-fw fa-caret-right" *ngIf="child.items"></span>
                         <span class="ui-menuitem-icon fa fa-fw" *ngIf="child.icon" [ngClass]="child.icon"></span>
                         <span class="ui-menuitem-text">{{child.label}}</span>
@@ -72,13 +75,8 @@ export class ContextMenuSub {
             event.preventDefault();
         }
         
-        if(item.command) {
-            if(!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            
-            item.eventEmitter.emit({
+        if(item.command) {            
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -155,11 +153,7 @@ export class ContextMenu implements AfterViewInit,OnDestroy {
 
     ngAfterViewInit() {
         this.container = <HTMLDivElement> this.containerViewChild.nativeElement;
-        
-        this.documentClickListener = this.renderer.listen('document', 'click', () => {
-            this.hide();
-        });
-        
+                
         if(this.global) {
             this.rightClickListener = this.renderer.listen('document', 'contextmenu', (event) => {
                 this.show(event);
@@ -186,6 +180,7 @@ export class ContextMenu implements AfterViewInit,OnDestroy {
         this.position(event);
         this.visible = true;
         this.domHandler.fadeIn(this.container, 250);
+        this.bindDocumentClickListener();
         
         if(event) {
             event.preventDefault();
@@ -194,6 +189,7 @@ export class ContextMenu implements AfterViewInit,OnDestroy {
     
     hide() {
         this.visible = false;
+        this.unbindDocumentClickListener();
     }
     
     toggle(event?: MouseEvent) {
@@ -235,34 +231,31 @@ export class ContextMenu implements AfterViewInit,OnDestroy {
             this.container.style.top = top + 'px';
         }
     }
-
-    unsubscribe(item: any) {
-        if(item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
+    
+    bindDocumentClickListener() {
+        if(!this.documentClickListener) {
+            this.documentClickListener = this.renderer.listen('document', 'click', (event) => {
+                if (this.visible && event.button !== 2) {
+                    this.hide();
+                }
+            });
         }
-        
-        if(item.items) {
-            for(let childItem of item.items) {
-                this.unsubscribe(childItem);
-            }
+    }
+    
+    unbindDocumentClickListener() {
+        if(this.documentClickListener) {
+            this.documentClickListener();
+            this.documentClickListener = null;
         }
     }
         
     ngOnDestroy() {
-        if(this.documentClickListener) {
-            this.documentClickListener();
-        }
+        this.unbindDocumentClickListener();
         
         if(this.rightClickListener) {
             this.rightClickListener();
         }
-        
-        if(this.model) {
-            for(let item of this.model) {
-                this.unsubscribe(item);
-            }
-        }
-        
+                
         if(this.appendTo) {
             this.el.nativeElement.appendChild(this.container);
         }

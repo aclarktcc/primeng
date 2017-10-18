@@ -1,4 +1,4 @@
-import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,EventEmitter,Inject,forwardRef,ViewChild} from '@angular/core';
+import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,Inject,forwardRef,ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DomHandler} from '../dom/domhandler';
 import {MenuItem} from '../common/menuitem';
@@ -12,15 +12,18 @@ import {RouterModule} from '@angular/router';
             [style.width.px]="menuWidth" [style.left.px]="root ? slideMenu.left : slideMenu.menuWidth" 
             [style.transitionProperty]="root ? 'left' : 'none'" [style.transitionDuration]="effectDuration + 'ms'" [style.transitionTimingFunction]="easing">
             <ng-template ngFor let-child [ngForOf]="(root ? item : item.items)">
-                <li #listitem [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-slidemenuitem-active':listitem==activeItem}">
-                    <a *ngIf="!item.routerLink" [href]="child.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="child.target"
+                <li *ngIf="child.separator" class="ui-menu-separator ui-widget-content">
+                <li *ngIf="!child.separator" #listitem [ngClass]="{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-slidemenuitem-active':listitem==activeItem}">
+                    <a *ngIf="!child.routerLink" [href]="child.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="child.target" [attr.title]="child.title"
                         [ngClass]="{'ui-menuitem-link-parent':child.items,'ui-state-disabled':child.disabled}" 
                         (click)="itemClick($event, child, listitem)">
                         <span class="ui-submenu-icon fa fa-fw fa-caret-right" *ngIf="child.items"></span>
                         <span class="ui-menuitem-icon fa fa-fw" *ngIf="child.icon" [ngClass]="child.icon"></span>
                         <span class="ui-menuitem-text">{{child.label}}</span>
                     </a>
-                    <a *ngIf="item.routerLink" [routerLink]="item.routerLink" [routerLinkActive]="'ui-state-active'" [routerLinkActiveOptions]="item.routerLinkActiveOptions||{exact:false}" [href]="child.url||'#'" class="ui-menuitem-link ui-corner-all" [attr.target]="child.target"
+                    <a *ngIf="child.routerLink" [routerLink]="child.routerLink" [routerLinkActive]="'ui-state-active'" 
+                        [routerLinkActiveOptions]="child.routerLinkActiveOptions||{exact:false}" [href]="child.url||'#'" class="ui-menuitem-link ui-corner-all" 
+                        [attr.target]="child.target" [attr.title]="child.title"
                         [ngClass]="{'ui-menuitem-link-parent':child.items,'ui-state-disabled':child.disabled}" 
                         (click)="itemClick($event, child, listitem)">
                         <span class="ui-submenu-icon fa fa-fw fa-caret-right" *ngIf="child.items"></span>
@@ -61,13 +64,8 @@ export class SlideMenuSub implements OnDestroy {
             event.preventDefault();
         }
                 
-        if(item.command) {
-            if(!item.eventEmitter && item.command) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            
-            item.eventEmitter.emit({
+        if(item.command) {            
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -117,11 +115,13 @@ export class SlideMenu implements AfterViewInit,OnDestroy {
     
     @Input() viewportHeight: number = 175;
     
-    @Input() effectDuration: any = 500;
+    @Input() effectDuration: any = 250;
         
     @Input() easing: string = 'ease-out';
     
     @Input() backLabel: string = 'Back';
+    
+    @Input() appendTo: any;
     
     @ViewChild('container') containerViewChild: ElementRef;
     
@@ -152,6 +152,13 @@ export class SlideMenu implements AfterViewInit,OnDestroy {
         this.slideMenuContentElement.style.height = this.viewportHeight - this.domHandler.getHiddenElementOuterHeight(this.backwardElement) + 'px';
         
         if(this.popup) {
+            if(this.appendTo) {
+                if(this.appendTo === 'body')
+                    document.body.appendChild(this.container);
+                else
+                    this.domHandler.appendChild(this.container, this.appendTo);
+            }
+            
             this.documentClickListener = this.renderer.listen('document', 'click', () => {
                 if(!this.preventDocumentDefault) {
                     this.hide();
@@ -178,18 +185,6 @@ export class SlideMenu implements AfterViewInit,OnDestroy {
     hide() {
         this.container.style.display = 'none';
     }
-
-    unsubscribe(item: any) {
-        if(item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        
-        if(item.items) {
-            for(let childItem of item.items) {
-                this.unsubscribe(childItem);
-            }
-        }
-    }
     
     onClick(event) {
         this.preventDocumentDefault = true;
@@ -200,13 +195,13 @@ export class SlideMenu implements AfterViewInit,OnDestroy {
     }
         
     ngOnDestroy() {
-        if(this.documentClickListener) {
-            this.documentClickListener();
-        }
-        
-        if(this.model) {
-            for(let item of this.model) {
-                this.unsubscribe(item);
+        if(this.popup) {
+            if(this.documentClickListener) {
+                this.documentClickListener();
+            }
+            
+            if(this.appendTo) {
+                this.el.nativeElement.appendChild(this.container);
             }
         }
     }

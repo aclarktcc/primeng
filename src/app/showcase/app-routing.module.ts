@@ -6,7 +6,7 @@ import { HomeComponent } from './components/home/home.component';
     imports: [
         RouterModule.forRoot([
             {path: '', component: HomeComponent},
-            /*{path: 'setup', loadChildren: './components/setup/setup.module#SetupModule'},
+            {path: 'setup', loadChildren: './components/setup/setup.module#SetupModule'},
             {path: 'theming', loadChildren: './components/theming/theming.module#ThemingModule'},
             {path: 'accordion', loadChildren: './components/accordion/accordiondemo.module#AccordionDemoModule'},
             {path: 'autocomplete', loadChildren: './components/autocomplete/autocompletedemo.module#AutoCompleteDemoModule'},
@@ -42,6 +42,7 @@ import { HomeComponent } from './components/home/home.component';
             {path: 'inputmask', loadChildren: './components/inputmask/inputmaskdemo.module#InputMaskDemoModule'},
             {path: 'inputswitch', loadChildren: './components/inputswitch/inputswitchdemo.module#InputSwitchDemoModule'},
             {path: 'inputtext', loadChildren: './components/inputtext/inputtextdemo.module#InputTextDemoModule'},
+            {path: 'inputgroup', loadChildren: './components/inputgroup/inputgroupdemo.module#InputGroupDemoModule'},
             {path: 'inputtextarea', loadChildren: './components/inputtextarea/inputtextareademo.module#InputTextareaDemoModule'},
             {path: 'lightbox', loadChildren: './components/lightbox/lightboxdemo.module#LightboxDemoModule'},
             {path: 'listbox', loadChildren: './components/listbox/listboxdemo.module#ListboxDemoModule'},
@@ -51,8 +52,8 @@ import { HomeComponent } from './components/home/home.component';
             {path: 'menumodel', loadChildren: './components/menumodel/menumodeldemo.module#MenuModelDemoModule'},
             {path: 'messages', loadChildren: './components/messages/messagesdemo.module#MessagesDemoModule'},
             {path: 'multiselect', loadChildren: './components/multiselect/multiselectdemo.module#MultiSelectDemoModule'},
-            {path: 'orderlist', loadChildren: './components/orderlist/orderlistdemo.module#OrderListDemoModule'},*/
-            {path: 'organizationchart', loadChildren: './components/organizationchart/organizationchartdemo.module#OrganizationChartDemoModule'}/*,
+            {path: 'orderlist', loadChildren: './components/orderlist/orderlistdemo.module#OrderListDemoModule'},
+            {path: 'organizationchart', loadChildren: './components/organizationchart/organizationchartdemo.module#OrganizationChartDemoModule'},
             {path: 'overlaypanel', loadChildren: './components/overlaypanel/overlaypaneldemo.module#OverlayPanelDemoModule'},
             {path: 'paginator', loadChildren: './components/paginator/paginatordemo.module#PaginatorDemoModule'},
             {path: 'panel', loadChildren: './components/panel/paneldemo.module#PanelDemoModule'},
@@ -60,17 +61,20 @@ import { HomeComponent } from './components/home/home.component';
             {path: 'password', loadChildren: './components/password/passworddemo.module#PasswordDemoModule'},
             {path: 'picklist', loadChildren: './components/picklist/picklistdemo.module#PickListDemoModule'},
             {path: 'progressbar', loadChildren: './components/progressbar/progressbardemo.module#ProgressBarDemoModule'},
+            {path: 'progressspinner', loadChildren: './components/progressspinner/progressspinnerdemo.module#ProgressSpinnerDemoModule'},
             {path: 'radiobutton', loadChildren: './components/radiobutton/radiobuttondemo.module#RadioButtonDemoModule'},
             {path: 'rating', loadChildren: './components/rating/ratingdemo.module#RatingDemoModule'},
             {path: 'responsive', loadChildren: './components/responsive/responsivedemo.module#ResponsiveDemoModule'},
             {path: 'rtl', loadChildren: './components/rtl/rtldemo.module#RTLDemoModule'},
             {path: 'schedule', loadChildren: './components/schedule/scheduledemo.module#ScheduleDemoModule'},
             {path: 'selectbutton', loadChildren: './components/selectbutton/selectbuttondemo.module#SelectButtonDemoModule'},
+            {path: 'sidebar', loadChildren: './components/sidebar/sidebardemo.module#SidebarDemoModule'},
             {path: 'slidemenu', loadChildren: './components/slidemenu/slidemenudemo.module#SlideMenuDemoModule'},
             {path: 'slider', loadChildren: './components/slider/sliderdemo.module#SliderDemoModule'},
             {path: 'spinner', loadChildren: './components/spinner/spinnerdemo.module#SpinnerDemoModule'},
             {path: 'splitbutton', loadChildren: './components/splitbutton/splitbuttondemo.module#SplitButtonDemoModule'},
             {path: 'steps', loadChildren: './components/steps/stepsdemo.module#StepsDemoModule'},
+            {path: 'support', loadChildren: './components/support/support.module#SupportModule'},
             {path: 'tabmenu', loadChildren: './components/tabmenu/tabmenudemo.module#TabMenuDemoModule'},
             {path: 'tabview', loadChildren: './components/tabview/tabviewdemo.module#TabViewDemoModule'},
             {path: 'terminal', loadChildren: './components/terminal/terminaldemo.module#TerminalDemoModule'},
@@ -81,7 +85,7 @@ import { HomeComponent } from './components/home/home.component';
             {path: 'tree', loadChildren: './components/tree/treedemo.module#TreeDemoModule'},
             {path: 'treetable', loadChildren: './components/treetable/treetabledemo.module#TreeTableDemoModule'},
             {path: 'tristatecheckbox', loadChildren: './components/tristatecheckbox/tristatecheckboxdemo.module#TriStateCheckboxDemoModule'},
-            {path: 'validation', loadChildren: './components/validation/validationdemo.module#ValidationDemoModule'}*/
+            {path: 'validation', loadChildren: './components/validation/validationdemo.module#ValidationDemoModule'}
         ])    
     ],
     exports: [RouterModule]

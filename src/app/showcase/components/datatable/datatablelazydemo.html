@@ -11,7 +11,7 @@
 </div>
 
 <div class="content-section implementation">
-    <p-dataTable [value]="cars" [lazy]="true" [rows]="10" [paginator]="true" 
+    <p-dataTable [value]="cars" [lazy]="true" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
                 [totalRecords]="totalRecords" (onLazyLoad)="loadCarsLazy($event)">
         <p-header>List of Cars</p-header>
         <p-column field="vin" header="Vin"></p-column>
@@ -21,9 +21,13 @@
     </p-dataTable>
 </div>
 
-<div class="content-section source">
+<div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="datatablelazydemo.ts">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/datatable/datatablelazydemo.ts" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-typescript" pCode ngNonBindable>
 export class DataTableLazyDemo implements OnInit &#123;
@@ -33,7 +37,7 @@ export class DataTableLazyDemo implements OnInit &#123;
     cars: Car[];
     
     totalRecords: number;
-
+    
     constructor(private carService: CarService) &#123; &#125;
 
     ngOnInit() &#123;
@@ -66,9 +70,13 @@ export class DataTableLazyDemo implements OnInit &#123;
         </p-tabPanel>
 
         <p-tabPanel header="datatablelazydemo.html">
+            <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/datatable/datatablelazydemo.html" class="btn-viewsource" target="_blank">
+                <i class="fa fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
 <pre>
 <code class="language-markup" pCode ngNonBindable>
-&lt;p-dataTable [value]="cars" [lazy]="true" [rows]="10" [paginator]="true" 
+&lt;p-dataTable [value]="cars" [lazy]="true" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
             [totalRecords]="totalRecords" (onLazyLoad)="loadCarsLazy($event)"&gt;
     &lt;p-header&gt;List of Cars&lt;/p-header&gt;
     &lt;p-column field="vin" header="Vin"&gt;&lt;/p-column&gt;
