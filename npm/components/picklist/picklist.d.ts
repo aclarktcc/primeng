@@ -22,6 +22,7 @@ export declare class PickList implements AfterViewChecked, AfterContentInit {
     showTargetControls: boolean;
     sourceFilterPlaceholder: string;
     targetFilterPlaceholder: string;
+    disabled: boolean;
     onMoveToSource: EventEmitter<any>;
     onMoveAllToSource: EventEmitter<any>;
     onMoveAllToTarget: EventEmitter<any>;

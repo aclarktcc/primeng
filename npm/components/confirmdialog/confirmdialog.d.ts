@@ -18,6 +18,8 @@ export declare class ConfirmDialog implements AfterViewInit, AfterViewChecked, O
     rejectIcon: string;
     rejectLabel: string;
     rejectVisible: boolean;
+    acceptButtonStyleClass: string;
+    rejectButtonStyleClass: string;
     width: any;
     height: any;
     closeOnEscape: boolean;

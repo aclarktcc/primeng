@@ -11,6 +11,7 @@ var Sidebar = (function () {
         this.renderer = renderer;
         this.position = 'left';
         this.blockScroll = false;
+        this.autoZIndex = true;
         this.baseZIndex = 0;
         this.onShow = new core_1.EventEmitter();
         this.onHide = new core_1.EventEmitter();
@@ -56,7 +57,9 @@ var Sidebar = (function () {
     };
     Sidebar.prototype.show = function () {
         this.executePostDisplayActions = true;
-        this.containerViewChild.nativeElement.style.zIndex = String(this.baseZIndex + (++domhandler_1.DomHandler.zindex));
+        if (this.autoZIndex) {
+            this.containerViewChild.nativeElement.style.zIndex = String(this.baseZIndex + (++domhandler_1.DomHandler.zindex));
+        }
         this.enableModality();
     };
     Sidebar.prototype.hide = function () {
@@ -144,6 +147,7 @@ Sidebar.propDecorators = {
     'blockScroll': [{ type: core_1.Input },],
     'style': [{ type: core_1.Input },],
     'styleClass': [{ type: core_1.Input },],
+    'autoZIndex': [{ type: core_1.Input },],
     'baseZIndex': [{ type: core_1.Input },],
     'containerViewChild': [{ type: core_1.ViewChild, args: ['container',] },],
     'onShow': [{ type: core_1.Output },],

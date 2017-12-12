@@ -19,6 +19,7 @@ export declare class Chips implements AfterContentInit, ControlValueAccessor {
     inputStyle: any;
     inputStyleClass: any;
     addOnTab: boolean;
+    addOnBlur: boolean;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
     templates: QueryList<any>;
@@ -35,8 +36,8 @@ export declare class Chips implements AfterContentInit, ControlValueAccessor {
     registerOnTouched(fn: Function): void;
     setDisabledState(val: boolean): void;
     resolveFieldData(data: any, field: string): any;
-    onInputFocus(): void;
-    onInputBlur(): void;
+    onInputFocus(event: FocusEvent): void;
+    onInputBlur(event: FocusEvent, inputEL: HTMLInputElement): void;
     removeItem(event: Event, index: number): void;
     addItem(event: Event, item: string): void;
     onKeydown(event: KeyboardEvent, inputEL: HTMLInputElement): void;

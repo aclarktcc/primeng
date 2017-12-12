@@ -54,5 +54,16 @@ describe('ObjectUtils Suite', function () {
         objectUtils.reorderArray(arr, 3, 1);
         expect(arr).toEqual(['New York', 'Barcelona', 'Istanbul', 'Paris', 'London']);
     });
+    it('Should inject an item as indexed', function () {
+        var sourceArr = ['New York', 'Istanbul', 'Paris', 'Barcelona', 'London'];
+        var arr = [];
+        objectUtils.insertIntoOrderedArray('Istanbul', 1, arr, sourceArr);
+        expect(arr).toEqual(['Istanbul']);
+        objectUtils.insertIntoOrderedArray('Paris', 2, arr, sourceArr);
+        objectUtils.insertIntoOrderedArray('New York', 0, arr, sourceArr);
+        objectUtils.insertIntoOrderedArray('London', 4, arr, sourceArr);
+        objectUtils.insertIntoOrderedArray('Barcelona', 3, arr, sourceArr);
+        expect(arr).toEqual(['New York', 'Istanbul', 'Paris', 'Barcelona', 'London']);
+    });
 });
 //# sourceMappingURL=objectutils.spec.js.map

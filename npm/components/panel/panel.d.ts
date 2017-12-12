@@ -15,6 +15,7 @@ export declare class Panel implements BlockableUI {
     onAfterToggle: EventEmitter<any>;
     footerFacet: any;
     animating: boolean;
+    id: string;
     constructor(el: ElementRef);
     toggle(event: any): boolean;
     expand(event: any): void;

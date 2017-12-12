@@ -22,6 +22,14 @@ var ColorPicker = (function () {
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
+    ColorPicker.prototype.ngAfterViewInit = function () {
+        if (this.appendTo) {
+            if (this.appendTo === 'body')
+                document.body.appendChild(this.panelViewChild.nativeElement);
+            else
+                this.domHandler.appendChild(this.panelViewChild.nativeElement, this.appendTo);
+        }
+    };
     ColorPicker.prototype.ngAfterViewChecked = function () {
         if (this.shown) {
             this.onShow();
@@ -377,6 +385,9 @@ var ColorPicker = (function () {
     };
     ColorPicker.prototype.ngOnDestroy = function () {
         this.unbindDocumentClickListener();
+        if (this.appendTo) {
+            this.el.nativeElement.appendChild(this.panelViewChild.nativeElement);
+        }
     };
     return ColorPicker;
 }());

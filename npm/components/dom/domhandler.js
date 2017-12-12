@@ -159,7 +159,7 @@ var DomHandler = (function () {
         var last = +new Date();
         var opacity = 0;
         var tick = function () {
-            opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
+            opacity = +element.style.opacity.replace(",", ".") + (new Date().getTime() - last) / duration;
             element.style.opacity = opacity;
             last = +new Date();
             if (+opacity < 1) {

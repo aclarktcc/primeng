@@ -102,6 +102,48 @@ var ObjectUtils = (function () {
             value.splice(to, 0, value.splice(from, 1)[0]);
         }
     };
+    ObjectUtils.prototype.generateSelectItems = function (val, field) {
+        var selectItems;
+        if (val && val.length) {
+            selectItems = [];
+            for (var _i = 0, val_1 = val; _i < val_1.length; _i++) {
+                var item = val_1[_i];
+                selectItems.push({ label: this.resolveFieldData(item, field), value: item });
+            }
+        }
+        return selectItems;
+    };
+    ObjectUtils.prototype.insertIntoOrderedArray = function (item, index, arr, sourceArr) {
+        if (arr.length > 0) {
+            var injected = false;
+            for (var i = 0; i < arr.length; i++) {
+                var currentItemIndex = this.findIndexInList(arr[i], sourceArr);
+                if (currentItemIndex > index) {
+                    arr.splice(i, 0, item);
+                    injected = true;
+                    break;
+                }
+            }
+            if (!injected) {
+                arr.push(item);
+            }
+        }
+        else {
+            arr.push(item);
+        }
+    };
+    ObjectUtils.prototype.findIndexInList = function (item, list) {
+        var index = -1;
+        if (list) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i] == item) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
+    };
     return ObjectUtils;
 }());
 ObjectUtils.decorators = [

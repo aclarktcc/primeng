@@ -76,6 +76,7 @@ var Schedule = (function () {
             eventConstraint: this.eventConstraint,
             eventRender: this.eventRender,
             dayRender: this.dayRender,
+            navLinks: this.navLinks,
             dayClick: function (date, jsEvent, view) {
                 _this.onDayClick.emit({
                     'date': date,
@@ -325,6 +326,7 @@ Schedule.propDecorators = {
     'timeFormat': [{ type: core_1.Input },],
     'eventRender': [{ type: core_1.Input },],
     'dayRender': [{ type: core_1.Input },],
+    'navLinks': [{ type: core_1.Input },],
     'options': [{ type: core_1.Input },],
     'onDayClick': [{ type: core_1.Output },],
     'onDrop': [{ type: core_1.Output },],

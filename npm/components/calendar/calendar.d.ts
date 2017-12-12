@@ -53,6 +53,9 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     showButtonBar: boolean;
     todayButtonStyleClass: string;
     clearButtonStyleClass: string;
+    autoZIndex: boolean;
+    baseZIndex: number;
+    panelStyleClass: string;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
     onClose: EventEmitter<any>;
@@ -149,10 +152,13 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     onYearDropdownChange(y: string): void;
     incrementHour(event: any): void;
     decrementHour(event: any): void;
+    validateHour(hour: any): boolean;
     incrementMinute(event: any): void;
     decrementMinute(event: any): void;
+    validateMinute(minute: any): boolean;
     incrementSecond(event: any): void;
     decrementSecond(event: any): void;
+    validateSecond(second: any): boolean;
     updateTime(): void;
     toggleAMPM(event: any): void;
     onUserInput(event: any): void;

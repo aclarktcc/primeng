@@ -21,6 +21,8 @@ export declare class SplitButton implements AfterViewInit, AfterViewChecked, OnD
     disabled: boolean;
     tabindex: number;
     appendTo: any;
+    dir: string;
+    containerViewChild: ElementRef;
     buttonViewChild: ElementRef;
     overlayViewChild: ElementRef;
     menuVisible: boolean;

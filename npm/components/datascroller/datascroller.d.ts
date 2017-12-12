@@ -1,9 +1,10 @@
-import { ElementRef, AfterViewInit, OnDestroy, Renderer2, EventEmitter, QueryList, TemplateRef } from '@angular/core';
+import { ElementRef, AfterViewInit, DoCheck, OnDestroy, Renderer2, EventEmitter, QueryList, TemplateRef, IterableDiffers } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
-export declare class DataScroller implements AfterViewInit, OnDestroy {
+export declare class DataScroller implements AfterViewInit, DoCheck, OnDestroy {
     el: ElementRef;
     renderer: Renderer2;
     domHandler: DomHandler;
+    differs: IterableDiffers;
     rows: number;
     lazy: boolean;
     onLazyLoad: EventEmitter<any>;
@@ -13,6 +14,8 @@ export declare class DataScroller implements AfterViewInit, OnDestroy {
     inline: boolean;
     scrollHeight: any;
     loader: any;
+    trackBy: Function;
+    immutable: boolean;
     contentViewChild: ElementRef;
     header: any;
     footer: any;
@@ -23,11 +26,13 @@ export declare class DataScroller implements AfterViewInit, OnDestroy {
     first: number;
     scrollFunction: any;
     contentElement: HTMLDivElement;
-    constructor(el: ElementRef, renderer: Renderer2, domHandler: DomHandler);
+    differ: any;
+    constructor(el: ElementRef, renderer: Renderer2, domHandler: DomHandler, differs: IterableDiffers);
     ngAfterViewInit(): void;
     ngAfterContentInit(): void;
     value: any[];
     handleDataChange(): void;
+    ngDoCheck(): void;
     load(): void;
     reset(): void;
     isEmpty(): boolean;

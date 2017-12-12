@@ -4,26 +4,27 @@ var core_1 = require("@angular/core");
 var animations_1 = require("@angular/animations");
 var common_1 = require("@angular/common");
 var shared_1 = require("../common/shared");
+var idx = 0;
 var Fieldset = (function () {
     function Fieldset(el) {
         this.el = el;
         this.collapsed = false;
         this.onBeforeToggle = new core_1.EventEmitter();
         this.onAfterToggle = new core_1.EventEmitter();
+        this.id = "ui-fieldset-" + idx++;
     }
     Fieldset.prototype.toggle = function (event) {
-        if (this.toggleable) {
-            if (this.animating) {
-                return false;
-            }
-            this.animating = true;
-            this.onBeforeToggle.emit({ originalEvent: event, collapsed: this.collapsed });
-            if (this.collapsed)
-                this.expand(event);
-            else
-                this.collapse(event);
-            this.onAfterToggle.emit({ originalEvent: event, collapsed: this.collapsed });
+        if (this.animating) {
+            return false;
         }
+        this.animating = true;
+        this.onBeforeToggle.emit({ originalEvent: event, collapsed: this.collapsed });
+        if (this.collapsed)
+            this.expand(event);
+        else
+            this.collapse(event);
+        this.onAfterToggle.emit({ originalEvent: event, collapsed: this.collapsed });
+        event.preventDefault();
     };
     Fieldset.prototype.expand = function (event) {
         this.collapsed = false;
@@ -42,7 +43,7 @@ var Fieldset = (function () {
 Fieldset.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-fieldset',
-                template: "\n        <fieldset [ngClass]=\"{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true, 'ui-fieldset-toggleable': toggleable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <legend class=\"ui-fieldset-legend ui-corner-all ui-state-default ui-unselectable-text\" (click)=\"toggle($event)\">\n                <span *ngIf=\"toggleable\" class=\"ui-fieldset-toggler fa fa-w\" [ngClass]=\"{'fa-minus': !collapsed,'fa-plus':collapsed}\"></span>\n                {{legend}}\n                <ng-content select=\"p-header\"></ng-content>\n            </legend>\n            <div class=\"ui-fieldset-content-wrapper\" [@fieldsetContent]=\"collapsed ? 'hidden' : 'visible'\" \n                        [ngClass]=\"{'ui-fieldset-content-wrapper-overflown': collapsed||animating}\"\n                         (@fieldsetContent.done)=\"onToggleDone($event)\">\n                <div class=\"ui-fieldset-content\">\n                    <ng-content></ng-content>\n                </div>\n            </div>\n        </fieldset>\n    ",
+                template: "\n        <fieldset [attr.id]=\"id\" [ngClass]=\"{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true, 'ui-fieldset-toggleable': toggleable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <legend class=\"ui-fieldset-legend ui-corner-all ui-state-default ui-unselectable-text\">\n                <a href=\"#\" (click)=\"toggle($event)\" [attr.aria-controls]=\"id + '-content'\" [attr.aria-expanded]=\"!collapsed\" [attr.tabindex]=\"toggleable ? null : -1\">\n                    <span class=\"ui-fieldset-toggler fa fa-w\" *ngIf=\"toggleable\" [ngClass]=\"{'fa-minus': !collapsed,'fa-plus':collapsed}\"></span>\n                    <span class=\"ui-fieldset-legend-text\">{{legend}}</span>\n                    <ng-content select=\"p-header\"></ng-content>\n                </a>\n            </legend>\n            <div [attr.id]=\"id + '-content'\" class=\"ui-fieldset-content-wrapper\" [@fieldsetContent]=\"collapsed ? 'hidden' : 'visible'\" \n                        [ngClass]=\"{'ui-fieldset-content-wrapper-overflown': collapsed||animating}\" [attr.aria-hidden]=\"collapsed\"\n                         (@fieldsetContent.done)=\"onToggleDone($event)\" role=\"region\">\n                <div class=\"ui-fieldset-content\">\n                    <ng-content></ng-content>\n                </div>\n            </div>\n        </fieldset>\n    ",
                 animations: [
                     animations_1.trigger('fieldsetContent', [
                         animations_1.state('hidden', animations_1.style({

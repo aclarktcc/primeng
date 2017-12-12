@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {CountryService} from '../../service/countryservice';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @Component({
     templateUrl: './autocompletedemo.html'
 })

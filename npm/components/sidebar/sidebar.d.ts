@@ -1,6 +1,6 @@
-import { AfterViewInit, AfterViewChecked, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
+import { AfterViewInit, AfterViewChecked, OnDestroy, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
-export declare class Sidebar implements AfterViewInit, AfterViewChecked {
+export declare class Sidebar implements AfterViewInit, AfterViewChecked, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -10,6 +10,7 @@ export declare class Sidebar implements AfterViewInit, AfterViewChecked {
     blockScroll: boolean;
     style: any;
     styleClass: string;
+    autoZIndex: boolean;
     baseZIndex: number;
     containerViewChild: ElementRef;
     onShow: EventEmitter<any>;

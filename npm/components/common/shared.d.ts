@@ -32,16 +32,26 @@ export declare class Column implements AfterContentInit {
     filter: boolean;
     filterMatchMode: string;
     filterType: string;
+    excludeGlobalFilter: boolean;
     rowspan: number;
     colspan: number;
+    scope: string;
     style: any;
     styleClass: string;
+    exportable: boolean;
+    headerStyle: any;
+    headerStyleClass: string;
+    bodyStyle: any;
+    bodyStyleClass: string;
+    footerStyle: any;
+    footerStyleClass: string;
     hidden: boolean;
     expander: boolean;
     selectionMode: string;
     filterPlaceholder: string;
     filterMaxlength: number;
     frozen: boolean;
+    resizable: boolean;
     sortFunction: EventEmitter<any>;
     templates: QueryList<any>;
     template: TemplateRef<any>;
@@ -111,10 +121,12 @@ export declare class ColumnEditorTemplateLoader implements OnInit, OnDestroy {
 export declare class TemplateLoader implements OnInit, OnDestroy {
     viewContainer: ViewContainerRef;
     template: TemplateRef<any>;
-    data: any;
+    _data: any;
     view: EmbeddedViewRef<any>;
     constructor(viewContainer: ViewContainerRef);
     ngOnInit(): void;
+    render(): void;
+    data: any;
     ngOnDestroy(): void;
 }
 export declare class SharedModule {

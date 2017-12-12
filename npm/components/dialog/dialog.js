@@ -5,6 +5,7 @@ var animations_1 = require("@angular/animations");
 var common_1 = require("@angular/common");
 var domhandler_1 = require("../dom/domhandler");
 var shared_1 = require("../common/shared");
+var idx = 0;
 var Dialog = (function () {
     function Dialog(el, domHandler, renderer, zone) {
         this.el = el;
@@ -21,9 +22,12 @@ var Dialog = (function () {
         this.showHeader = true;
         this.breakpoint = 640;
         this.blockScroll = false;
+        this.autoZIndex = true;
+        this.baseZIndex = 0;
         this.onShow = new core_1.EventEmitter();
         this.onHide = new core_1.EventEmitter();
         this.visibleChange = new core_1.EventEmitter();
+        this.id = "ui-dialog-" + idx++;
     }
     Object.defineProperty(Dialog.prototype, "visible", {
         get: function () {
@@ -54,7 +58,7 @@ var Dialog = (function () {
     };
     Dialog.prototype.show = function () {
         this.executePostDisplayActions = true;
-        this.containerViewChild.nativeElement.style.zIndex = String(++domhandler_1.DomHandler.zindex);
+        this.moveOnTop();
         this.bindGlobalListeners();
         if (this.modal) {
             this.enableModality();
@@ -125,7 +129,11 @@ var Dialog = (function () {
         if (!this.mask) {
             this.mask = document.createElement('div');
             this.mask.style.zIndex = String(parseInt(this.containerViewChild.nativeElement.style.zIndex) - 1);
-            this.domHandler.addMultipleClasses(this.mask, 'ui-widget-overlay ui-dialog-mask');
+            var maskStyleClass = 'ui-widget-overlay ui-dialog-mask';
+            if (this.blockScroll) {
+                maskStyleClass += ' ui-dialog-mask-scrollblocker';
+            }
+            this.domHandler.addMultipleClasses(this.mask, maskStyleClass);
             if (this.closable && this.dismissableMask) {
                 this.maskClickListener = this.renderer.listen(this.mask, 'click', function (event) {
                     _this.close(event);
@@ -141,7 +149,18 @@ var Dialog = (function () {
         if (this.mask) {
             document.body.removeChild(this.mask);
             if (this.blockScroll) {
-                this.domHandler.removeClass(document.body, 'ui-overflow-hidden');
+                var bodyChildren = document.body.children;
+                var hasBlockerMasks = void 0;
+                for (var i = 0; i < bodyChildren.length; i++) {
+                    var bodyChild = bodyChildren[i];
+                    if (this.domHandler.hasClass(bodyChild, 'ui-dialog-mask-scrollblocker')) {
+                        hasBlockerMasks = true;
+                        break;
+                    }
+                }
+                if (!hasBlockerMasks) {
+                    this.domHandler.removeClass(document.body, 'ui-overflow-hidden');
+                }
             }
             this.mask = null;
         }
@@ -153,7 +172,9 @@ var Dialog = (function () {
         }
     };
     Dialog.prototype.moveOnTop = function () {
-        this.containerViewChild.nativeElement.style.zIndex = String(++domhandler_1.DomHandler.zindex);
+        if (this.autoZIndex) {
+            this.containerViewChild.nativeElement.style.zIndex = String(this.baseZIndex + (++domhandler_1.DomHandler.zindex));
+        }
     };
     Dialog.prototype.onCloseMouseDown = function (event) {
         this.closeIconMouseDown = true;
@@ -331,7 +352,7 @@ var Dialog = (function () {
 Dialog.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-dialog',
-                template: "\n        <div #container [ngClass]=\"{'ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow':true,'ui-dialog-rtl':rtl,'ui-dialog-draggable':draggable}\" [ngStyle]=\"style\" [class]=\"styleClass\"\n            [style.display]=\"visible ? 'block' : 'none'\" [style.width.px]=\"width\" [style.height.px]=\"height\" [style.minWidth.px]=\"minWidth\" (mousedown)=\"moveOnTop()\" [@dialogState]=\"visible ? 'visible' : 'hidden'\">\n            <div #titlebar class=\"ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top\"\n                (mousedown)=\"initDrag($event)\" (mouseup)=\"endDrag($event)\" *ngIf=\"showHeader\">\n                <span class=\"ui-dialog-title\" *ngIf=\"header\">{{header}}</span>\n                <span class=\"ui-dialog-title\" *ngIf=\"headerFacet && headerFacet.first\">\n                    <ng-content select=\"p-header\"></ng-content>\n                </span>\n                <a *ngIf=\"closable\" [ngClass]=\"{'ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all':true}\" href=\"#\" role=\"button\" (click)=\"close($event)\" (mousedown)=\"onCloseMouseDown($event)\">\n                    <span class=\"fa fa-fw fa-close\"></span>\n                </a>\n            </div>\n            <div #content class=\"ui-dialog-content ui-widget-content\" [ngStyle]=\"contentStyle\">\n                <ng-content></ng-content>\n            </div>\n            <div class=\"ui-dialog-footer ui-widget-content\" *ngIf=\"footerFacet && footerFacet.first\">\n                <ng-content select=\"p-footer\"></ng-content>\n            </div>\n            <div *ngIf=\"resizable\" class=\"ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se\" style=\"z-index: 90;\"\n                (mousedown)=\"initResize($event)\"></div>\n        </div>\n    ",
+                template: "\n        <div #container [ngClass]=\"{'ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow':true,'ui-helper-hidden': !visible, 'ui-dialog-rtl':rtl,'ui-dialog-draggable':draggable}\" \n            [ngStyle]=\"style\" [class]=\"styleClass\" [style.width.px]=\"width\" [style.height.px]=\"height\" [style.minWidth.px]=\"minWidth\" (mousedown)=\"moveOnTop()\" [@dialogState]=\"visible ? 'visible' : 'hidden'\"\n            role=\"dialog\" [attr.aria-labelledby]=\"id + '-label'\">\n            <div #titlebar class=\"ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top\"\n                (mousedown)=\"initDrag($event)\" (mouseup)=\"endDrag($event)\" *ngIf=\"showHeader\">\n                <span [attr.id]=\"id + '-label'\" class=\"ui-dialog-title\" *ngIf=\"header\">{{header}}</span>\n                <span [attr.id]=\"id + '-label'\" class=\"ui-dialog-title\" *ngIf=\"headerFacet && headerFacet.first\">\n                    <ng-content select=\"p-header\"></ng-content>\n                </span>\n                <a *ngIf=\"closable\" [ngClass]=\"{'ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all':true}\" href=\"#\" role=\"button\" (click)=\"close($event)\" (mousedown)=\"onCloseMouseDown($event)\">\n                    <span class=\"fa fa-fw fa-close\"></span>\n                </a>\n            </div>\n            <div #content class=\"ui-dialog-content ui-widget-content\" [ngStyle]=\"contentStyle\">\n                <ng-content></ng-content>\n            </div>\n            <div class=\"ui-dialog-footer ui-widget-content\" *ngIf=\"footerFacet && footerFacet.first\">\n                <ng-content select=\"p-footer\"></ng-content>\n            </div>\n            <div *ngIf=\"resizable\" class=\"ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se\" style=\"z-index: 90;\"\n                (mousedown)=\"initResize($event)\"></div>\n        </div>\n    ",
                 animations: [
                     animations_1.trigger('dialogState', [
                         animations_1.state('hidden', animations_1.style({
@@ -377,6 +398,8 @@ Dialog.propDecorators = {
     'showHeader': [{ type: core_1.Input },],
     'breakpoint': [{ type: core_1.Input },],
     'blockScroll': [{ type: core_1.Input },],
+    'autoZIndex': [{ type: core_1.Input },],
+    'baseZIndex': [{ type: core_1.Input },],
     'headerFacet': [{ type: core_1.ContentChildren, args: [shared_1.Header, { descendants: false },] },],
     'footerFacet': [{ type: core_1.ContentChildren, args: [shared_1.Footer, { descendants: false },] },],
     'containerViewChild': [{ type: core_1.ViewChild, args: ['container',] },],

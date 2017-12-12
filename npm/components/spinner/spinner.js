@@ -66,9 +66,9 @@ var Spinner = (function () {
         var power = Math.pow(10, precision || 0);
         return String(Math.round(value * power) / power);
     };
-    Spinner.prototype.onUpButtonMousedown = function (event, input) {
+    Spinner.prototype.onUpButtonMousedown = function (event) {
         if (!this.disabled) {
-            input.focus();
+            this.inputfieldViewChild.nativeElement.focus();
             this.repeat(event, null, 1);
             this.updateFilledState();
         }
@@ -83,9 +83,9 @@ var Spinner = (function () {
             this.clearTimer();
         }
     };
-    Spinner.prototype.onDownButtonMousedown = function (event, input) {
+    Spinner.prototype.onDownButtonMousedown = function (event) {
         if (!this.disabled) {
-            input.focus();
+            this.inputfieldViewChild.nativeElement.focus();
             this.repeat(event, null, -1);
             this.updateFilledState();
         }
@@ -116,8 +116,8 @@ var Spinner = (function () {
             event.preventDefault();
         }
     };
-    Spinner.prototype.onInput = function (event, inputValue) {
-        this.value = this.parseValue(inputValue);
+    Spinner.prototype.onInputKeyup = function (event) {
+        this.value = this.parseValue(event.target.value);
         this.formatValue();
         this.onModelChange(this.value);
         this.updateFilledState();
@@ -171,6 +171,7 @@ var Spinner = (function () {
         else {
             this.valueAsString = '';
         }
+        this.inputfieldViewChild.nativeElement.value = this.valueAsString;
     };
     Spinner.prototype.handleChange = function (event) {
         this.onChange.emit(event);
@@ -202,7 +203,7 @@ var Spinner = (function () {
 Spinner.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-spinner',
-                template: "\n        <span class=\"ui-spinner ui-widget ui-corner-all\">\n            <input #in [attr.type]=\"type\" [attr.id]=\"inputId\" class=\"ui-spinner-input\" [value]=\"valueAsString\" class=\"ui-inputtext ui-widget ui-state-default ui-corner-all\"\n            [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [attr.placeholder]=\"placeholder\" [disabled]=\"disabled\" [readonly]=\"readonly\" [attr.required]=\"required\"\n            (keydown)=\"onInputKeydown($event)\" (keyup)=\"onInput($event,in.value)\" (keypress)=\"onInputKeyPress($event)\" (blur)=\"onInputBlur($event)\" (change)=\"handleChange($event)\" (focus)=\"onInputFocus($event)\">\n            <button type=\"button\" [ngClass]=\"{'ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default':true,'ui-state-disabled':disabled}\" [disabled]=\"disabled\"\n                (mouseleave)=\"onUpButtonMouseleave($event)\" (mousedown)=\"onUpButtonMousedown($event,in)\" (mouseup)=\"onUpButtonMouseup($event)\">\n                <span class=\"fa fa-caret-up ui-clickable\"></span>\n            </button>\n            <button type=\"button\" [ngClass]=\"{'ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default':true,'ui-state-disabled':disabled}\" [disabled]=\"disabled\"\n                (mouseleave)=\"onDownButtonMouseleave($event)\" (mousedown)=\"onDownButtonMousedown($event,in)\" (mouseup)=\"onDownButtonMouseup($event)\">\n                <span class=\"fa fa-caret-down ui-clickable\"></span>\n            </button>\n        </span>\n    ",
+                template: "\n        <span class=\"ui-spinner ui-widget ui-corner-all\">\n            <input #inputfield [attr.type]=\"type\" [attr.id]=\"inputId\" [value]=\"valueAsString\" class=\"ui-spinner-input ui-inputtext ui-widget ui-state-default ui-corner-all\"\n            [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [attr.placeholder]=\"placeholder\" [disabled]=\"disabled\" [attr.readonly]=\"readonly\" [attr.required]=\"required\"\n            (keydown)=\"onInputKeydown($event)\" (keyup)=\"onInputKeyup($event)\" (keypress)=\"onInputKeyPress($event)\" (blur)=\"onInputBlur($event)\" (change)=\"handleChange($event)\" (focus)=\"onInputFocus($event)\">\n            <button type=\"button\" [ngClass]=\"{'ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default':true,'ui-state-disabled':disabled}\" [disabled]=\"disabled\" [attr.readonly]=\"readonly\"\n                (mouseleave)=\"onUpButtonMouseleave($event)\" (mousedown)=\"onUpButtonMousedown($event)\" (mouseup)=\"onUpButtonMouseup($event)\">\n                <span class=\"fa fa-caret-up ui-clickable\"></span>\n            </button>\n            <button type=\"button\" [ngClass]=\"{'ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default':true,'ui-state-disabled':disabled}\" [disabled]=\"disabled\" [attr.readonly]=\"readonly\"\n                (mouseleave)=\"onDownButtonMouseleave($event)\" (mousedown)=\"onDownButtonMousedown($event)\" (mouseup)=\"onDownButtonMouseup($event)\">\n                <span class=\"fa fa-caret-down ui-clickable\"></span>\n            </button>\n        </span>\n    ",
                 host: {
                     '[class.ui-inputwrapper-filled]': 'filled',
                     '[class.ui-inputwrapper-focus]': 'focus'
@@ -234,6 +235,7 @@ Spinner.propDecorators = {
     'formatInput': [{ type: core_1.Input },],
     'type': [{ type: core_1.Input },],
     'required': [{ type: core_1.Input },],
+    'inputfieldViewChild': [{ type: core_1.ViewChild, args: ['inputfield',] },],
 };
 exports.Spinner = Spinner;
 var SpinnerModule = (function () {

@@ -9,7 +9,6 @@ export declare class Listbox implements AfterContentInit, ControlValueAccessor {
     domHandler: DomHandler;
     objectUtils: ObjectUtils;
     cd: ChangeDetectorRef;
-    options: SelectItem[];
     multiple: boolean;
     style: any;
     styleClass: string;
@@ -22,6 +21,7 @@ export declare class Listbox implements AfterContentInit, ControlValueAccessor {
     metaKeySelection: boolean;
     dataKey: string;
     showToggleAll: boolean;
+    optionLabel: string;
     onChange: EventEmitter<any>;
     onDblClick: EventEmitter<any>;
     headerFacet: any;
@@ -36,7 +36,9 @@ export declare class Listbox implements AfterContentInit, ControlValueAccessor {
     checkboxClick: boolean;
     optionTouched: boolean;
     focus: boolean;
+    _options: any[];
     constructor(el: ElementRef, domHandler: DomHandler, objectUtils: ObjectUtils, cd: ChangeDetectorRef);
+    options: any[];
     ngAfterContentInit(): void;
     writeValue(value: any): void;
     registerOnChange(fn: Function): void;

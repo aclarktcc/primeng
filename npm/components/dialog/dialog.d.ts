@@ -28,6 +28,8 @@ export declare class Dialog implements AfterViewInit, AfterViewChecked, OnDestro
     showHeader: boolean;
     breakpoint: number;
     blockScroll: boolean;
+    autoZIndex: boolean;
+    baseZIndex: number;
     headerFacet: QueryList<Header>;
     footerFacet: QueryList<Header>;
     containerViewChild: ElementRef;
@@ -53,6 +55,7 @@ export declare class Dialog implements AfterViewInit, AfterViewChecked, OnDestro
     preventVisibleChangePropagation: boolean;
     executePostDisplayActions: boolean;
     initialized: boolean;
+    id: string;
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, zone: NgZone);
     visible: boolean;
     ngAfterViewChecked(): void;

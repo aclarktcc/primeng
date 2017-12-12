@@ -13,6 +13,7 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     zone: NgZone;
     scrollHeight: string;
     filter: boolean;
+    name: string;
     style: any;
     panelStyle: any;
     styleClass: string;
@@ -32,6 +33,8 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     lazy: boolean;
     autofocus: boolean;
     resetFilterOnHide: boolean;
+    dropdownIcon: string;
+    optionLabel: string;
     onChange: EventEmitter<any>;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
@@ -43,12 +46,12 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     editableInputViewChild: ElementRef;
     templates: QueryList<any>;
     itemTemplate: TemplateRef<any>;
-    selectedOption: SelectItem;
-    _options: SelectItem[];
+    selectedOption: any;
+    _options: any[];
     value: any;
     onModelChange: Function;
     onModelTouched: Function;
-    optionsToDisplay: SelectItem[];
+    optionsToDisplay: any[];
     hover: boolean;
     focus: boolean;
     panelVisible: boolean;
@@ -67,7 +70,7 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, cd: ChangeDetectorRef, objectUtils: ObjectUtils, zone: NgZone);
     ngAfterContentInit(): void;
     ngOnInit(): void;
-    options: SelectItem[];
+    options: any[];
     ngAfterViewInit(): void;
     readonly label: string;
     updateEditableLabel(): void;

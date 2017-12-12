@@ -11,6 +11,7 @@ export declare class Fieldset implements BlockableUI {
     styleClass: string;
     animating: boolean;
     constructor(el: ElementRef);
+    id: string;
     toggle(event: any): boolean;
     expand(event: any): void;
     collapse(event: any): void;

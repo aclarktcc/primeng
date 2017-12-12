@@ -88,6 +88,8 @@ exports.TemplateWrapper = TemplateWrapper;
 var Column = (function () {
     function Column() {
         this.filterType = 'text';
+        this.exportable = true;
+        this.resizable = true;
         this.sortFunction = new core_1.EventEmitter();
     }
     Column.prototype.ngAfterContentInit = function () {
@@ -120,7 +122,7 @@ var Column = (function () {
 Column.decorators = [
     { type: core_2.Component, args: [{
                 selector: 'p-column',
-                template: ""
+                template: ''
             },] },
 ];
 /** @nocollapse */
@@ -137,16 +139,26 @@ Column.propDecorators = {
     'filter': [{ type: core_1.Input },],
     'filterMatchMode': [{ type: core_1.Input },],
     'filterType': [{ type: core_1.Input },],
+    'excludeGlobalFilter': [{ type: core_1.Input },],
     'rowspan': [{ type: core_1.Input },],
     'colspan': [{ type: core_1.Input },],
+    'scope': [{ type: core_1.Input },],
     'style': [{ type: core_1.Input },],
     'styleClass': [{ type: core_1.Input },],
+    'exportable': [{ type: core_1.Input },],
+    'headerStyle': [{ type: core_1.Input },],
+    'headerStyleClass': [{ type: core_1.Input },],
+    'bodyStyle': [{ type: core_1.Input },],
+    'bodyStyleClass': [{ type: core_1.Input },],
+    'footerStyle': [{ type: core_1.Input },],
+    'footerStyleClass': [{ type: core_1.Input },],
     'hidden': [{ type: core_1.Input },],
     'expander': [{ type: core_1.Input },],
     'selectionMode': [{ type: core_1.Input },],
     'filterPlaceholder': [{ type: core_1.Input },],
     'filterMaxlength': [{ type: core_1.Input },],
     'frozen': [{ type: core_1.Input },],
+    'resizable': [{ type: core_1.Input },],
     'sortFunction': [{ type: core_1.Output },],
     'templates': [{ type: core_1.ContentChildren, args: [PrimeTemplate,] },],
     'template': [{ type: core_1.ContentChild, args: [core_1.TemplateRef,] },],
@@ -366,15 +378,33 @@ var TemplateLoader = (function () {
         this.viewContainer = viewContainer;
     }
     TemplateLoader.prototype.ngOnInit = function () {
+        this.render();
+    };
+    TemplateLoader.prototype.render = function () {
+        if (this.view) {
+            this.view.destroy();
+        }
         if (this.template) {
             this.view = this.viewContainer.createEmbeddedView(this.template, {
                 '\$implicit': this.data
             });
         }
     };
+    Object.defineProperty(TemplateLoader.prototype, "data", {
+        get: function () {
+            return this._data;
+        },
+        set: function (val) {
+            this._data = val;
+            this.render();
+        },
+        enumerable: true,
+        configurable: true
+    });
     TemplateLoader.prototype.ngOnDestroy = function () {
-        if (this.view)
+        if (this.view) {
             this.view.destroy();
+        }
     };
     return TemplateLoader;
 }());

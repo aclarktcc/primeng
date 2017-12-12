@@ -5,14 +5,18 @@ var common_1 = require("@angular/common");
 var shared_1 = require("../common/shared");
 var domhandler_1 = require("../dom/domhandler");
 var DataScroller = (function () {
-    function DataScroller(el, renderer, domHandler) {
+    function DataScroller(el, renderer, domHandler, differs) {
         this.el = el;
         this.renderer = renderer;
         this.domHandler = domHandler;
+        this.differs = differs;
         this.onLazyLoad = new core_1.EventEmitter();
         this.buffer = 0.9;
+        this.trackBy = function (index, item) { return item; };
+        this.immutable = true;
         this.dataToRender = [];
         this.first = 0;
+        this.differ = differs.find([]).create(null);
     }
     DataScroller.prototype.ngAfterViewInit = function () {
         var _this = this;
@@ -47,7 +51,9 @@ var DataScroller = (function () {
         },
         set: function (val) {
             this._value = val;
-            this.handleDataChange();
+            if (this.immutable) {
+                this.handleDataChange();
+            }
         },
         enumerable: true,
         configurable: true
@@ -57,6 +63,14 @@ var DataScroller = (function () {
             this.dataToRender = this.value;
         else
             this.load();
+    };
+    DataScroller.prototype.ngDoCheck = function () {
+        if (!this.immutable) {
+            var changes = this.differ.diff(this.value);
+            if (changes) {
+                this.handleDataChange();
+            }
+        }
     };
     DataScroller.prototype.load = function () {
         if (this.lazy) {
@@ -130,7 +144,7 @@ var DataScroller = (function () {
 DataScroller.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-dataScroller',
-                template: "\n    <div [ngClass]=\"{'ui-datascroller ui-widget': true, 'ui-datascroller-inline': inline}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n        <div class=\"ui-datascroller-header ui-widget-header ui-corner-top\" *ngIf=\"header\">\n            <ng-content select=\"p-header\"></ng-content>\n        </div>\n        <div #content class=\"ui-datascroller-content ui-widget-content\" [ngStyle]=\"{'max-height': scrollHeight}\">\n            <ul class=\"ui-datascroller-list\">\n                <li *ngFor=\"let item of dataToRender\">\n                    <ng-template [pTemplateWrapper]=\"itemTemplate\" [item]=\"item\"></ng-template>\n                </li>\n            </ul>\n        </div>\n        <div class=\"ui-datascroller-footer ui-widget-header ui-corner-bottom\" *ngIf=\"footer\">\n            <ng-content select=\"p-footer\"></ng-content>\n        </div>\n    </div>\n    ",
+                template: "\n    <div [ngClass]=\"{'ui-datascroller ui-widget': true, 'ui-datascroller-inline': inline}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n        <div class=\"ui-datascroller-header ui-widget-header ui-corner-top\" *ngIf=\"header\">\n            <ng-content select=\"p-header\"></ng-content>\n        </div>\n        <div #content class=\"ui-datascroller-content ui-widget-content\" [ngStyle]=\"{'max-height': scrollHeight}\">\n            <ul class=\"ui-datascroller-list\">\n                <li *ngFor=\"let item of dataToRender;trackBy: trackBy\">\n                    <ng-template [pTemplateWrapper]=\"itemTemplate\" [item]=\"item\"></ng-template>\n                </li>\n            </ul>\n        </div>\n        <div class=\"ui-datascroller-footer ui-widget-header ui-corner-bottom\" *ngIf=\"footer\">\n            <ng-content select=\"p-footer\"></ng-content>\n        </div>\n    </div>\n    ",
                 providers: [domhandler_1.DomHandler]
             },] },
 ];
@@ -139,6 +153,7 @@ DataScroller.ctorParameters = function () { return [
     { type: core_1.ElementRef, },
     { type: core_1.Renderer2, },
     { type: domhandler_1.DomHandler, },
+    { type: core_1.IterableDiffers, },
 ]; };
 DataScroller.propDecorators = {
     'rows': [{ type: core_1.Input },],
@@ -150,6 +165,8 @@ DataScroller.propDecorators = {
     'inline': [{ type: core_1.Input },],
     'scrollHeight': [{ type: core_1.Input },],
     'loader': [{ type: core_1.Input },],
+    'trackBy': [{ type: core_1.Input },],
+    'immutable': [{ type: core_1.Input },],
     'contentViewChild': [{ type: core_1.ViewChild, args: ['content',] },],
     'header': [{ type: core_1.ContentChild, args: [shared_1.Header,] },],
     'footer': [{ type: core_1.ContentChild, args: [shared_1.Footer,] },],

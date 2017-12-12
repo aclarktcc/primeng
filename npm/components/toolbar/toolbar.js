@@ -3,8 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var Toolbar = (function () {
-    function Toolbar() {
+    function Toolbar(el) {
+        this.el = el;
     }
+    Toolbar.prototype.getBlockableElement = function () {
+        return this.el.nativeElement.children[0];
+    };
     return Toolbar;
 }());
 Toolbar.decorators = [
@@ -14,7 +18,9 @@ Toolbar.decorators = [
             },] },
 ];
 /** @nocollapse */
-Toolbar.ctorParameters = function () { return []; };
+Toolbar.ctorParameters = function () { return [
+    { type: core_1.ElementRef, },
+]; };
 Toolbar.propDecorators = {
     'style': [{ type: core_1.Input },],
     'styleClass': [{ type: core_1.Input },],

@@ -7,6 +7,8 @@ var BlockUI = (function () {
     function BlockUI(el, domHandler) {
         this.el = el;
         this.domHandler = domHandler;
+        this.autoZIndex = true;
+        this.baseZIndex = 0;
     }
     Object.defineProperty(BlockUI.prototype, "blocked", {
         get: function () {
@@ -39,7 +41,9 @@ var BlockUI = (function () {
         else {
             document.body.appendChild(this.mask.nativeElement);
         }
-        this.mask.nativeElement.style.zIndex = String(++domhandler_1.DomHandler.zindex);
+        if (this.autoZIndex) {
+            this.mask.nativeElement.style.zIndex = String(this.baseZIndex + (++domhandler_1.DomHandler.zindex));
+        }
     };
     BlockUI.prototype.unblock = function () {
         this.el.nativeElement.appendChild(this.mask.nativeElement);
@@ -63,6 +67,8 @@ BlockUI.ctorParameters = function () { return [
 ]; };
 BlockUI.propDecorators = {
     'target': [{ type: core_1.Input },],
+    'autoZIndex': [{ type: core_1.Input },],
+    'baseZIndex': [{ type: core_1.Input },],
     'mask': [{ type: core_1.ViewChild, args: ['mask',] },],
     'blocked': [{ type: core_1.Input },],
 };

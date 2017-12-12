@@ -27,6 +27,17 @@ var Listbox = (function () {
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
+    Object.defineProperty(Listbox.prototype, "options", {
+        get: function () {
+            return this._options;
+        },
+        set: function (val) {
+            var opts = this.optionLabel ? this.objectUtils.generateSelectItems(val, this.optionLabel) : val;
+            this._options = opts;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Listbox.prototype.ngAfterContentInit = function () {
         var _this = this;
         this.templates.forEach(function (item) {
@@ -285,7 +296,6 @@ Listbox.ctorParameters = function () { return [
     { type: core_1.ChangeDetectorRef, },
 ]; };
 Listbox.propDecorators = {
-    'options': [{ type: core_1.Input },],
     'multiple': [{ type: core_1.Input },],
     'style': [{ type: core_1.Input },],
     'styleClass': [{ type: core_1.Input },],
@@ -298,11 +308,13 @@ Listbox.propDecorators = {
     'metaKeySelection': [{ type: core_1.Input },],
     'dataKey': [{ type: core_1.Input },],
     'showToggleAll': [{ type: core_1.Input },],
+    'optionLabel': [{ type: core_1.Input },],
     'onChange': [{ type: core_1.Output },],
     'onDblClick': [{ type: core_1.Output },],
     'headerFacet': [{ type: core_1.ContentChild, args: [shared_1.Header,] },],
     'footerFacet': [{ type: core_1.ContentChild, args: [shared_1.Footer,] },],
     'templates': [{ type: core_1.ContentChildren, args: [shared_1.PrimeTemplate,] },],
+    'options': [{ type: core_1.Input },],
 };
 exports.Listbox = Listbox;
 var ListboxModule = (function () {

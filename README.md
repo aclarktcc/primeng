@@ -29,7 +29,7 @@ Note: There are several /components folders in the project. You know it's the ri
 
 How to Update and Publish New NPM:
 
-1. cd into /npm
+1. cd npm
 2. Confirm the npm/components folder was just created by the date-time stamp. If not correct, go back and run the Export Component steps.
 3. Depending on the update (Major, Minor, Patch), update the npm/package.json by typing: npm version patch, npm version minor, or npm version major. Our 508 updates are considered patches. Major and minor patches will normally come from upstream PrimeNG changes.
 4. Confirm the version incremented correctly (i.e. 1.1.1 -> npm version patch -> 1.1.2)

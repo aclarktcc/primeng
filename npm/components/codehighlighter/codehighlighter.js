@@ -7,7 +7,9 @@ var CodeHighlighter = (function () {
         this.el = el;
     }
     CodeHighlighter.prototype.ngOnInit = function () {
-        Prism.highlightElement(this.el.nativeElement);
+        if (Prism) {
+            Prism.highlightElement(this.el.nativeElement);
+        }
     };
     return CodeHighlighter;
 }());

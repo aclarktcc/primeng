@@ -108,6 +108,7 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     selectionMode: string;
     selectionChange: EventEmitter<any>;
     editable: boolean;
+    showHeaderCheckbox: boolean;
     onRowClick: EventEmitter<any>;
     onRowSelect: EventEmitter<any>;
     onRowUnselect: EventEmitter<any>;
@@ -177,7 +178,6 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     dataKey: string;
     loading: boolean;
     loadingIcon: string;
-    enableLoader: boolean;
     virtualScrollDelay: number;
     rowGroupExpandMode: string;
     valueChange: EventEmitter<any[]>;
@@ -226,6 +226,8 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     rowGroupFooterTemplate: TemplateRef<any>;
     rowExpansionTemplate: TemplateRef<any>;
     emptyMessageTemplate: TemplateRef<any>;
+    paginatorLeftTemplate: TemplateRef<any>;
+    paginatorRightTemplate: TemplateRef<any>;
     scrollBarWidth: number;
     editorClick: boolean;
     _first: number;
@@ -247,6 +249,7 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     initialized: boolean;
     virtualScrollTimer: any;
     virtualScrollableTableWrapper: HTMLDivElement;
+    virtualScrollCallback: Function;
     editChanged: boolean;
     constructor(el: ElementRef, domHandler: DomHandler, differs: IterableDiffers, renderer: Renderer2, changeDetector: ChangeDetectorRef, objectUtils: ObjectUtils, zone: NgZone);
     ngOnInit(): void;
@@ -283,8 +286,8 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     isSorted(column: Column): boolean;
     getSortOrder(column: Column): number;
     onRowGroupClick(event: any): void;
-    clearSelectionRange(): void;
-    selectRange(rowIndex: number): void;
+    clearSelectionRange(event: MouseEvent): void;
+    selectRange(event: MouseEvent, rowIndex: number): void;
     handleRowClick(event: MouseEvent, rowData: any, index: number): void;
     handleRowTouchEnd(event: Event): void;
     selectRowWithRadio(event: Event, rowData: any): void;

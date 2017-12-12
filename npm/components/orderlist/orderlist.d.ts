@@ -37,13 +37,13 @@ export declare class OrderList implements AfterViewChecked, AfterContentInit {
     ngAfterContentInit(): void;
     ngAfterViewChecked(): void;
     value: any[];
-    onItemClick(event: any, item: any): void;
+    onItemClick(event: any, item: any, index: any): void;
+    selectItem(item: any, index: any): void;
     onFilterKeyup(event: any): void;
     filter(): void;
     isItemVisible(item: any): boolean;
     onItemTouchEnd(event: any): void;
     isSelected(item: any): boolean;
-    findIndexInList(item: any, list: any): number;
     moveUp(event: any, listElement: any): void;
     moveTop(event: any, listElement: any): void;
     moveDown(event: any, listElement: any): void;

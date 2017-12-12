@@ -1,8 +1,8 @@
-import { ElementRef, AfterViewChecked, OnDestroy, EventEmitter, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { ElementRef, AfterViewInit, AfterViewChecked, OnDestroy, EventEmitter, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 import { ControlValueAccessor } from '@angular/forms';
 export declare const COLORPICKER_VALUE_ACCESSOR: any;
-export declare class ColorPicker implements ControlValueAccessor, AfterViewChecked, OnDestroy {
+export declare class ColorPicker implements ControlValueAccessor, AfterViewInit, AfterViewChecked, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -37,6 +37,7 @@ export declare class ColorPicker implements ControlValueAccessor, AfterViewCheck
     colorDragging: boolean;
     hueDragging: boolean;
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, cd: ChangeDetectorRef);
+    ngAfterViewInit(): void;
     ngAfterViewChecked(): void;
     onHueMousedown(event: MouseEvent): void;
     pickHue(event: MouseEvent): void;
