@@ -15,52 +15,52 @@ export const EDITOR_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'p-editor',
     template: `
-        <div [ngClass]="'ui-widget ui-editor-container ui-corner-all'" [class]="styleClass">
+        <div [ngClass]="'ui-widget ui-editor-container ui-corner-all'" [class]="styleClass" attr.aria-label="This is a text editor that allows you to compose and style a body of text">
             <div class="ui-editor-toolbar ui-widget-header ui-corner-top" *ngIf="toolbar">
                 <ng-content select="p-header"></ng-content>
             </div>
-            <div class="ui-editor-toolbar ui-widget-header ui-corner-top" *ngIf="!toolbar">
+            <div class="ui-editor-toolbar ui-widget-header ui-corner-top" *ngIf="!toolbar" attr.aria-label="Editor Toolbar">
                 <span class="ql-formats">
-                    <select class="ql-header">
+                    <select class="ql-header" attr.aria-label="Select what type of text this is" title="Select what type of text this is">
                       <option value="1">Heading</option>
                       <option value="2">Subheading</option>
                       <option selected>Normal</option>
                     </select>
-                    <select class="ql-font">
+                    <select class="ql-font" attr.aria-label="Select font type to use" title="Select font type to use">
                       <option selected>Sans Serif</option>
                       <option value="serif">Serif</option>
                       <option value="monospace">Monospace</option>
                     </select>
                 </span>
-                <span class="ql-formats">
+                <span class="ql-formats" attr.aria-label="Choose which font style to use">
                     <button class="ql-bold" aria-label="Bold"></button>
                     <button class="ql-italic" aria-label="Italic"></button>
                     <button class="ql-underline" aria-label="Underline"></button>
                 </span>
-                <span class="ql-formats">
-                    <select class="ql-color"></select>
-                    <select class="ql-background"></select>
+                <span class="ql-formats" attr.aria-label="Select colors">
+                    <select class="ql-color" attr.aria-label="text color picker" title="Text Color"></select>
+                    <select class="ql-background" attr.aria-label="background color picker" title="Background Color"></select>
                 </span>
-                <span class="ql-formats">
-                    <button class="ql-list" value="ordered" aria-label="Ordered List"></button>
-                    <button class="ql-list" value="bullet" aria-label="Unordered List"></button>
-                    <select class="ql-align">
-                        <option selected></option>
-                        <option value="center"></option>
-                        <option value="right"></option>
-                        <option value="justify"></option>
+                <span class="ql-formats" attr.aria-label="list types and alignment options">
+                    <button class="ql-list" value="ordered" aria-label="Ordered List" title="Ordered List"></button>
+                    <button class="ql-list" value="bullet" aria-label="Unordered List" title="Unordered List"></button>
+                    <select class="ql-align" attr.aria-label="Select text alignment" title="Align Text">
+                        <option selected attr.aria-label="Selected Alignment"></option>
+                        <option value="center" attr.aria-label="Align Center" title="Align Center"></option>
+                        <option value="right" attr.aria-label="Align Right" title="Align Right"></option>
+                        <option value="justify" attr.aria-label="Justify Text" title="Justify Text"></option>
                     </select>
                 </span>
-                <span class="ql-formats">
-                    <button class="ql-link" aria-label="Insert Link"></button>
-                    <button class="ql-image" aria-label="Insert Image"></button>
-                    <button class="ql-code-block" aria-label="Insert Code Block"></button>
+                <span class="ql-formats" attr.aria-label="types of insert buttons">
+                    <button class="ql-link" aria-label="Insert Link" title="Insert Link"></button>
+                    <button class="ql-image" aria-label="Insert Image" title="Insert Image"></button>
+                    <button class="ql-code-block" aria-label="Insert Code Block" title="Insert Code Block"></button>
                 </span>
                 <span class="ql-formats">
-                    <button class="ql-clean" aria-label="Remove Styles"></button>
+                    <button class="ql-clean" aria-label="Remove Styles" title="Remove Styles"></button>
                 </span>
             </div>
-            <div class="ui-editor-content" [ngStyle]="style"></div>
+            <div class="ui-editor-content" [ngStyle]="style" attr.aria-label="Main editor text body"></div>
         </div>
     `,
     providers: [DomHandler,EDITOR_VALUE_ACCESSOR]

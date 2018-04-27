@@ -15,8 +15,8 @@ import {Subscription}   from 'rxjs/Subscription';
             [style.display]="visible ? 'block' : 'none'" [style.width.px]="width" [style.height.px]="height" (mousedown)="moveOnTop()" [@dialogState]="visible ? 'visible' : 'hidden'">
             <div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">
                 <span class="ui-dialog-title" *ngIf="header">{{header}}</span>
-                <a *ngIf="closable" [ngClass]="{'ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all':true}" href="#" role="button" (click)="close($event)">
-                    <span class="fa fa-fw fa-close"></span>
+                <a *ngIf="closable" [ngClass]="{'ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all':true}" href="#" role="button" (click)="close($event)" aria-label="Click here to close dialog">
+                    <span class="fa fa-fw fa-close" aria-hidden="true"></span>
                 </a>
             </div>
             <div class="ui-dialog-content ui-widget-content">

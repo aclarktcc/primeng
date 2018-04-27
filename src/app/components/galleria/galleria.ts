@@ -12,7 +12,7 @@ import {DomHandler} from '../dom/domhandler';
                     <img class="ui-panel-images" [src]="image.source" [alt]="image.alt" [title]="image.title"/>
                 </li>
             </ul>
-            <div [ngClass]="{'ui-galleria-filmstrip-wrapper':true}" *ngIf="showFilmstrip">
+            <div [ngClass]="{'ui-galleria-filmstrip-wrapper':true}" *ngIf="showFilmstrip" aria-label="list of thumbnail images in this galleria">
                 <ul class="ui-galleria-filmstrip" style="transition:left 1s" [style.left.px]="stripLeft">
                     <li #frame *ngFor="let image of images;let i=index" [ngClass]="{'ui-galleria-frame-active':i==activeIndex}" class="ui-galleria-frame" (click)="frameClick(frame)"
                         [style.width.px]="frameWidth" [style.height.px]="frameHeight" [style.transition]="'opacity 0.75s ease'">
@@ -23,8 +23,8 @@ import {DomHandler} from '../dom/domhandler';
                     </li>
                 </ul>
             </div>
-            <div class="ui-galleria-nav-prev fa fa-fw fa-chevron-circle-left" (click)="clickNavLeft()" [style.bottom.px]="frameHeight/2" *ngIf="activeIndex !== 0"></div>
-            <div class="ui-galleria-nav-next fa fa-fw fa-chevron-circle-right" (click)="clickNavRight()" [style.bottom.px]="frameHeight/2"></div>
+            <div class="ui-galleria-nav-prev fa fa-fw fa-chevron-circle-left" aria-label="Click to navigate left in the list" (click)="clickNavLeft()" [style.bottom.px]="frameHeight/2" *ngIf="activeIndex !== 0"></div>
+            <div class="ui-galleria-nav-next fa fa-fw fa-chevron-circle-right" aria-label="Click to navigate right in the list" (click)="clickNavRight()" [style.bottom.px]="frameHeight/2"></div>
             <div class="ui-galleria-caption" *ngIf="showCaption&&images" style="display:block">
                 <h4>{{images[activeIndex]?.title}}</h4><p>{{images[activeIndex]?.alt}}</p>
             </div>

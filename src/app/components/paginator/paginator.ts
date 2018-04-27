@@ -7,26 +7,26 @@ import {CommonModule} from '@angular/common';
         <div [class]="styleClass" [ngStyle]="style" [ngClass]="'ui-paginator ui-widget ui-widget-header ui-unselectable-text'"
             *ngIf="alwaysShow ? true : (pageLinks && pageLinks.length > 1)">
             <a href="#" class="ui-paginator-first ui-paginator-element ui-state-default ui-corner-all"
-                    (click)="changePageToFirst($event)" [ngClass]="{'ui-state-disabled':isFirstPage()}" [tabindex]="isFirstPage() ? -1 : null">
-                <span class="fa fa-step-backward"></span>
+                    (click)="changePageToFirst($event)" [ngClass]="{'ui-state-disabled':isFirstPage()}" [tabindex]="isFirstPage() ? -1 : null" aria-label="Skip to the first page of results">
+                <span class="fa fa-step-backward" aria-hidden="true"></span>
             </a>
             <a href="#" class="ui-paginator-prev ui-paginator-element ui-state-default ui-corner-all"
-                    (click)="changePageToPrev($event)" [ngClass]="{'ui-state-disabled':isFirstPage()}" [tabindex]="isFirstPage() ? -1 : null">
-                <span class="fa fa-backward"></span>
+                    (click)="changePageToPrev($event)" [ngClass]="{'ui-state-disabled':isFirstPage()}" [tabindex]="isFirstPage() ? -1 : null" aria-label="Step back one page of results">
+                <span class="fa fa-backward" aria-hidden="true"></span>
             </a>
             <span class="ui-paginator-pages">
                 <a href="#" *ngFor="let pageLink of pageLinks" class="ui-paginator-page ui-paginator-element ui-state-default ui-corner-all"
                     (click)="onPageLinkClick($event, pageLink - 1)" [ngClass]="{'ui-state-active': (pageLink-1 == getPage())}">{{pageLink}}</a>
             </span>
             <a href="#" class="ui-paginator-next ui-paginator-element ui-state-default ui-corner-all"
-                    (click)="changePageToNext($event)" [ngClass]="{'ui-state-disabled':isLastPage()}" [tabindex]="isLastPage() ? -1 : null">
-                <span class="fa fa-forward"></span>
+                    (click)="changePageToNext($event)" [ngClass]="{'ui-state-disabled':isLastPage()}" [tabindex]="isLastPage() ? -1 : null" aria-label="Step forward one page of results">
+                <span class="fa fa-forward" aria-hidden="true"></span>
             </a>
             <a href="#" class="ui-paginator-last ui-paginator-element ui-state-default ui-corner-all"
-                    (click)="changePageToLast($event)" [ngClass]="{'ui-state-disabled':isLastPage()}" [tabindex]="isLastPage() ? -1 : null">
-                <span class="fa fa-step-forward"></span>
+                    (click)="changePageToLast($event)" [ngClass]="{'ui-state-disabled':isLastPage()}" [tabindex]="isLastPage() ? -1 : null" aria-label="Skip to the last page of results">
+                <span class="fa fa-step-forward" aria-hidden="true"></span>
             </a>
-            <select class="ui-paginator-rpp-options ui-widget ui-state-default" *ngIf="rowsPerPageOptions" (change)="onRppChange($event)">
+            <select class="ui-paginator-rpp-options ui-widget ui-state-default" *ngIf="rowsPerPageOptions" (change)="onRppChange($event)" aria-label="dropdown menu to select how many results per page to show in data grid">
                 <option *ngFor="let opt of rowsPerPageOptions" [value]="opt" [selected]="rows == opt">{{opt}}</option>
             </select>
         </div>

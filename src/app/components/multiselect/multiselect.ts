@@ -19,7 +19,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
         <div #container [ngClass]="{'ui-multiselect ui-widget ui-state-default ui-corner-all':true,'ui-state-focus':focus,'ui-state-disabled': disabled}" [ngStyle]="style" [class]="styleClass"
             (click)="onMouseclick($event,in)">
             <div class="ui-helper-hidden-accessible">
-                <input #in type="text" readonly="readonly" [attr.id]="inputId" (focus)="onFocus($event)" (blur)="onInputBlur($event)" [disabled]="disabled" [attr.tabindex]="tabindex">
+                <input #in type="text" readonly="readonly" [attr.id]="inputId" (focus)="onFocus($event)" (blur)="onInputBlur($event)" [disabled]="disabled" [attr.tabindex]="tabindex" attr.aria-label="{{valuesAsString}}">
             </div>
             <div class="ui-multiselect-label-container" [title]="valuesAsString">
                 <label class="ui-multiselect-label ui-corner-all">{{valuesAsString}}</label>
@@ -32,19 +32,19 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                 <div class="ui-widget-header ui-corner-all ui-multiselect-header ui-helper-clearfix" [ngClass]="{'ui-multiselect-header-no-toggleall': !showToggleAll}">
                     <div class="ui-chkbox ui-widget" *ngIf="showToggleAll">
                         <div class="ui-helper-hidden-accessible">
-                            <input #cb type="checkbox" readonly="readonly" [checked]="isAllChecked()">
+                            <input #cb type="checkbox" readonly="readonly" [checked]="isAllChecked()" [attr.aria-label]="option.label">
                         </div>
                         <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':isAllChecked()}" (click)="toggleAll($event,cb)">
-                            <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isAllChecked()}"></span>
+                            <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isAllChecked()}" aria-hidden="true"></span>
                         </div>
                     </div>
                     <div class="ui-multiselect-filter-container" *ngIf="filter">
                         <input #filterInput type="text" role="textbox" (input)="onFilter($event)"
                                     class="ui-inputtext ui-widget ui-state-default ui-corner-all">
-                        <span class="fa fa-fw fa-search"></span>
+                        <span class="fa fa-fw fa-search" aria-label="search icon"></span>
                     </div>
-                    <a class="ui-multiselect-close ui-corner-all" href="#" (click)="close($event)">
-                        <span class="fa fa-close"></span>
+                    <a class="ui-multiselect-close ui-corner-all" href="#" (click)="close($event)" aria-label="Click here to close">
+                        <span class="fa fa-close" aria-hidden="true"></span>
                     </a>
                 </div>
                 <div class="ui-multiselect-items-wrapper">
@@ -56,11 +56,11 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                                     <input type="checkbox" readonly="readonly" [checked]="isSelected(option.value)">
                                 </div>
                                 <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':isSelected(option.value)}">
-                                    <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isSelected(option.value)}"></span>
+                                    <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isSelected(option.value)}" aria-hidden="true"></span>
                                 </div>
                             </div>
-                            <label *ngIf="!itemTemplate">{{option.label}}</label>
-                            <ng-template [pTemplateWrapper]="itemTemplate" [item]="option" [index]="i" *ngIf="itemTemplate"></ng-template>
+                            <label *ngIf="!itemTemplate" id="itemTemplateLbl">{{option.label}}</label>
+                            <ng-template attr.aria-labelledby="itemTemplateLbl" [pTemplateWrapper]="itemTemplate" [item]="option" [index]="i" *ngIf="itemTemplate"></ng-template>
                         </li>
                     </ul>
                 </div>

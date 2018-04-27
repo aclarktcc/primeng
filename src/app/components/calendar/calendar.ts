@@ -33,25 +33,25 @@ export interface LocaleSettings {
                     [readonly]="readonlyInput" (input)="onUserInput($event)" [ngStyle]="inputStyle" [class]="inputStyleClass" [placeholder]="placeholder||''" [disabled]="disabled" [attr.tabindex]="tabindex"
                     [ngClass]="'ui-inputtext ui-widget ui-state-default ui-corner-all'"
                     ><button type="button" [icon]="icon" pButton *ngIf="showIcon" (click)="onButtonClick($event,inputfield)" class="ui-datepicker-trigger ui-calendar-button"
-                    [ngClass]="{'ui-state-disabled':disabled}" [disabled]="disabled" tabindex="-1"></button>
+                    [ngClass]="{'ui-state-disabled':disabled}" [disabled]="disabled" tabindex="-1" aria-label="Click to Open Calendar" title="Click to Open Calendar"></button>
             </ng-template>
-            <div #datepicker class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" [ngClass]="{'ui-datepicker-inline':inline,'ui-shadow':!inline,'ui-state-disabled':disabled,'ui-datepicker-timeonly':timeOnly}" 
+            <div #datepicker [class]="panelStyleClass" [ngClass]="{'ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all': true, 'ui-datepicker-inline':inline,'ui-shadow':!inline,'ui-state-disabled':disabled,'ui-datepicker-timeonly':timeOnly}" 
                 [ngStyle]="{'display': inline ? 'inline-block' : (overlayVisible ? 'block' : 'none')}" (click)="onDatePickerClick($event)" [@overlayState]="inline ? 'visible' : (overlayVisible ? 'visible' : 'hidden')">
 
                 <div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all" *ngIf="!timeOnly && (overlayVisible || inline)">
                     <ng-content select="p-header"></ng-content>
-                    <a class="ui-datepicker-prev ui-corner-all" href="#" (click)="prevMonth($event)">
-                        <span class="fa fa-angle-left"></span>
+                    <a class="ui-datepicker-prev ui-corner-all" href="#" (click)="prevMonth($event)" title="Click for Previous Month" aria-label="Click for Previous Month">
+                        <span class="fa fa-angle-left" aria-hidden="true"></span>
                     </a>
-                    <a class="ui-datepicker-next ui-corner-all" href="#" (click)="nextMonth($event)">
-                        <span class="fa fa-angle-right"></span>
+                    <a class="ui-datepicker-next ui-corner-all" href="#" (click)="nextMonth($event)" title="Click for Next Month" aria-label="Click for Previous Month">
+                        <span class="fa fa-angle-right" aria-hidden="true"></span>
                     </a>
                     <div class="ui-datepicker-title">
                         <span class="ui-datepicker-month" *ngIf="!monthNavigator">{{locale.monthNames[currentMonth]}}</span>
-                        <select class="ui-datepicker-month" *ngIf="monthNavigator" (change)="onMonthDropdownChange($event.target.value)">
+                        <select class="ui-datepicker-month" *ngIf="monthNavigator" (change)="onMonthDropdownChange($event.target.value)" aria-label="Select month from the dropdown menu">
                             <option [value]="i" *ngFor="let month of locale.monthNames;let i = index" [selected]="i == currentMonth">{{month}}</option>
                         </select>
-                        <select class="ui-datepicker-year" *ngIf="yearNavigator" (change)="onYearDropdownChange($event.target.value)">
+                        <select class="ui-datepicker-year" *ngIf="yearNavigator" (change)="onYearDropdownChange($event.target.value)" aria-label="Select year from the dropdown menu">
                             <option [value]="year" *ngFor="let year of yearOptions" [selected]="year == currentYear">{{year}}</option>
                         </select>
                         <span class="ui-datepicker-year" *ngIf="!yearNavigator">{{currentYear}}</span>
@@ -81,57 +81,57 @@ export interface LocaleSettings {
                 </table>
                 <div class="ui-timepicker ui-widget-header ui-corner-all" *ngIf="showTime||timeOnly">
                     <div class="ui-hour-picker">
-                        <a href="#" (click)="incrementHour($event)">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" (click)="incrementHour($event)" aria-label="Click To Increment Hour" title="Click To Increment Hour">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span [ngStyle]="{'display': currentHour < 10 ? 'inline': 'none'}">0</span><span>{{currentHour}}</span>
-                        <a href="#" (click)="decrementHour($event)">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" (click)="decrementHour($event)" aria-label="Click To Decrement Hour" title="Click To Decrement Hour">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="ui-separator">
-                        <a href="#">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" aria-label="separator pointing up">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span>:</span>
-                        <a href="#">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" aria-label="separator pointing down">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="ui-minute-picker">
-                        <a href="#" (click)="incrementMinute($event)">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" (click)="incrementMinute($event)" aria-label="Click To Increment Minute" title="Click To Increment Minute">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span [ngStyle]="{'display': currentMinute < 10 ? 'inline': 'none'}">0</span><span>{{currentMinute}}</span>
-                        <a href="#" (click)="decrementMinute($event)">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" (click)="decrementMinute($event)" aria-label="Click To Decrement Minute" title="Click To Decrement Minute">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="ui-separator" *ngIf="showSeconds">
-                        <a href="#">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" aria-label="separator pointing up">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span>:</span>
-                        <a href="#">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" aria-label="separator pointing down">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="ui-second-picker" *ngIf="showSeconds">
-                        <a href="#" (click)="incrementSecond($event)">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" (click)="incrementSecond($event)" aria-label="Click To Increment Second" title="Click To Increment Second">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span [ngStyle]="{'display': currentSecond < 10 ? 'inline': 'none'}">0</span><span>{{currentSecond}}</span>
-                        <a href="#" (click)="decrementSecond($event)">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" (click)="decrementSecond($event)" aria-label="Click To Decrement Second" title="Click To Decrement Second">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="ui-ampm-picker" *ngIf="hourFormat=='12'">
-                        <a href="#" (click)="toggleAMPM($event)">
-                            <span class="fa fa-angle-up"></span>
+                        <a href="#" (click)="toggleAMPM($event)" aria-label="Click To Toggle AM / PM" title="Click To Toggle AM / PM">
+                            <span class="fa fa-angle-up" aria-hidden="true"></span>
                         </a>
                         <span>{{pm ? 'PM' : 'AM'}}</span>
-                        <a href="#" (click)="toggleAMPM($event)">
-                            <span class="fa fa-angle-down"></span>
+                        <a href="#" (click)="toggleAMPM($event)" aria-label="Click To Toggle AM / PM" title="Click To Toggle AM / PM">
+                            <span class="fa fa-angle-down" aria-hidden="true"></span>
                         </a>
                     </div>
                 </div>
