@@ -17,7 +17,7 @@ export const LISTBOX_VALUE_ACCESSOR: any = {
   template: `
     <div [ngClass]="{'ui-listbox ui-inputtext ui-widget ui-widget-content ui-corner-all':true,'ui-state-disabled':disabled,'ui-state-focus':focus}" [ngStyle]="style" [class]="styleClass">
       <div class="ui-helper-hidden-accessible">
-        <input type="text" readonly="readonly" (focus)="onInputFocus($event)" (blur)="onInputBlur($event)">
+        <input type="text" readonly="readonly" (focus)="onInputFocus($event)" (blur)="onInputBlur($event)" aria-label="type in term to search for">
       </div>
       <div class="ui-widget-header ui-corner-all ui-listbox-header ui-helper-clearfix" *ngIf="headerFacet">
         <ng-content select="p-header"></ng-content>
@@ -25,15 +25,15 @@ export const LISTBOX_VALUE_ACCESSOR: any = {
       <div class="ui-widget-header ui-corner-all ui-listbox-header ui-helper-clearfix" *ngIf="(checkbox && multiple) || filter" [ngClass]="{'ui-listbox-header-w-checkbox': checkbox}">
         <div class="ui-chkbox ui-widget" *ngIf="checkbox && multiple && showToggleAll">
           <div class="ui-helper-hidden-accessible">
-            <input #cb type="checkbox" readonly="readonly" [checked]="allChecked">
+            <input #cb type="checkbox" readonly="readonly" [checked]="allChecked" aria-label="check to selet all">
           </div>
           <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':allChecked}" (click)="toggleAll($event,cb)">
-            <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':allChecked}"></span>
+            <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':allChecked}" attr.aria-label="checkmark icon"></span>
           </div>
         </div>
         <div class="ui-listbox-filter-container" *ngIf="filter">
-          <input type="text" role="textbox" (input)="onFilter($event)" class="ui-inputtext ui-widget ui-state-default ui-corner-all" [disabled]="disabled">
-          <span class="fa fa-search"></span>
+          <input type="text" role="textbox" (input)="onFilter($event)" class="ui-inputtext ui-widget ui-state-default ui-corner-all" [disabled]="disabled" aria-label="type in term to search for">
+          <span class="fa fa-search" aria-label="Search Icon"></span>
         </div>
       </div>
       <div class="ui-listbox-list-wrapper">
@@ -43,7 +43,7 @@ export const LISTBOX_VALUE_ACCESSOR: any = {
               (click)="onOptionClick($event,option)" (dblclick)="onDoubleClick($event,option)" (touchend)="onOptionTouchEnd($event,option)">
             <div class="ui-chkbox ui-widget" *ngIf="checkbox && multiple" (click)="onCheckboxClick($event,option)">
               <div class="ui-helper-hidden-accessible">
-                <input type="checkbox" [checked]="isSelected(option)" [disabled]="disabled">
+                <input type="checkbox" [checked]="isSelected(option)" [disabled]="disabled" aria-label="checkbox">
               </div>
               <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':isSelected(option)}">
                 <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isSelected(option)}"></span>
