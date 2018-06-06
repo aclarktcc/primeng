@@ -13,6 +13,8 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterContentI
     options: SelectItem[];
     scrollHeight: string;
     defaultLabel: string;
+    ariaLblckbx: string;
+    ariaLbl: string;
     style: any;
     styleClass: string;
     panelStyle: any;

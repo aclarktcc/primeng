@@ -11,6 +11,7 @@ exports.CHECKBOX_VALUE_ACCESSOR = {
 var Checkbox = (function () {
     function Checkbox(cd) {
         this.cd = cd;
+        this.ariaLbl = 'Check box control';
         this.onChange = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
@@ -34,6 +35,7 @@ var Checkbox = (function () {
                 this.addValue();
             else
                 this.removeValue();
+            // this.ariaLbl = 'Checkbox is not checked';
             this.onModelChange(this.model);
             if (this.formControl) {
                 this.formControl.setValue(this.model);
@@ -57,10 +59,13 @@ var Checkbox = (function () {
     Checkbox.prototype.removeValue = function () {
         var _this = this;
         this.model = this.model.filter(function (val) { return val !== _this.value; });
+        this.ariaLbl = 'Checkbox is not checked';
     };
     Checkbox.prototype.addValue = function () {
-        if (this.model)
+        if (this.model) {
             this.model = this.model.concat([this.value]);
+            this.ariaLbl = 'Checkbox is checked';
+        }
         else
             this.model = [this.value];
     };
@@ -84,13 +89,14 @@ var Checkbox = (function () {
     };
     Checkbox.prototype.setDisabledState = function (val) {
         this.disabled = val;
+        this.ariaLbl = 'Checkbox is disabled';
     };
     return Checkbox;
 }());
 Checkbox.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-checkbox',
-                template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #cb type=\"checkbox\" [attr.id]=\"inputId\" [name]=\"name\" [value]=\"value\" [checked]=\"checked\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\"\n                [ngClass]=\"{'ui-state-focus':focused}\" (change)=\"handleChange($event)\" [disabled]=\"disabled\" [attr.tabindex]=\"tabindex\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,cb,true)\"\n                        [ngClass]=\"{'ui-state-active':checked,'ui-state-disabled':disabled,'ui-state-focus':focused}\">\n                <span class=\"ui-chkbox-icon ui-clickable\" [ngClass]=\"{'fa fa-check':checked}\"></span>\n            </div>\n        </div>\n        <label class=\"ui-chkbox-label\" (click)=\"onClick($event,cb,true)\" \n                [ngClass]=\"{'ui-label-active':checked, 'ui-label-disabled':disabled, 'ui-label-focus':focused}\"\n                *ngIf=\"label\" [attr.for]=\"inputId\">{{label}}</label>\n    ",
+                template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #cb type=\"checkbox\" [attr.id]=\"inputId\" [name]=\"name\" [value]=\"value\" [checked]=\"checked\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\"\n                [ngClass]=\"{'ui-state-focus':focused}\" (change)=\"handleChange($event)\" [disabled]=\"disabled\" [attr.tabindex]=\"tabindex\" [attr.aria-label]=\"ariaLbl\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,cb,true)\"\n                        [ngClass]=\"{'ui-state-active':checked,'ui-state-disabled':disabled,'ui-state-focus':focused}\">\n                <span class=\"ui-chkbox-icon ui-clickable\" [ngClass]=\"{'fa fa-check':checked}\" ></span>\n            </div>\n        </div>\n        <label class=\"ui-chkbox-label\" (click)=\"onClick($event,cb,true)\" \n                [ngClass]=\"{'ui-label-active':checked, 'ui-label-disabled':disabled, 'ui-label-focus':focused}\"\n                *ngIf=\"label\" [attr.for]=\"inputId\">{{label}}</label>\n    ",
                 providers: [exports.CHECKBOX_VALUE_ACCESSOR]
             },] },
 ];
@@ -104,6 +110,7 @@ Checkbox.propDecorators = {
     'disabled': [{ type: core_1.Input },],
     'binary': [{ type: core_1.Input },],
     'label': [{ type: core_1.Input },],
+    'ariaLbl': [{ type: core_1.Input },],
     'tabindex': [{ type: core_1.Input },],
     'inputId': [{ type: core_1.Input },],
     'style': [{ type: core_1.Input },],

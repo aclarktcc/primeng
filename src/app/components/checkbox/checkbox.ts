@@ -14,11 +14,11 @@ export const CHECKBOX_VALUE_ACCESSOR: any = {
         <div [ngStyle]="style" [ngClass]="'ui-chkbox ui-widget'" [class]="styleClass">
             <div class="ui-helper-hidden-accessible">
                 <input #cb type="checkbox" [attr.id]="inputId" [name]="name" [value]="value" [checked]="checked" (focus)="onFocus($event)" (blur)="onBlur($event)"
-                [ngClass]="{'ui-state-focus':focused}" (change)="handleChange($event)" [disabled]="disabled" [attr.tabindex]="tabindex">
+                [ngClass]="{'ui-state-focus':focused}" (change)="handleChange($event)" [disabled]="disabled" [attr.tabindex]="tabindex" [attr.aria-label]="ariaLbl">
             </div>
             <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" (click)="onClick($event,cb,true)"
                         [ngClass]="{'ui-state-active':checked,'ui-state-disabled':disabled,'ui-state-focus':focused}">
-                <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':checked}"></span>
+                <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':checked}" ></span>
             </div>
         </div>
         <label class="ui-chkbox-label" (click)="onClick($event,cb,true)" 
@@ -38,6 +38,8 @@ export class Checkbox implements ControlValueAccessor {
     @Input() binary: string;
     
     @Input() label: string;
+
+    @Input() ariaLbl = 'Check box control';
 
     @Input() tabindex: number;
 
@@ -82,8 +84,10 @@ export class Checkbox implements ControlValueAccessor {
         if(!this.binary) {
             if(this.checked)
                 this.addValue();
+                // this.ariaLbl = 'Checkbox is checked';
             else
                 this.removeValue();
+                // this.ariaLbl = 'Checkbox is not checked';
 
             this.onModelChange(this.model);
             
@@ -112,11 +116,15 @@ export class Checkbox implements ControlValueAccessor {
 
     removeValue() {
         this.model = this.model.filter(val => val !== this.value);
+        this.ariaLbl = 'Checkbox is not checked';
     }
 
     addValue() {
-        if(this.model)
+        if(this.model) {
             this.model = [...this.model, this.value];
+            this.ariaLbl = 'Checkbox is checked';
+        }
+            
         else
             this.model = [this.value];
     }
@@ -146,6 +154,7 @@ export class Checkbox implements ControlValueAccessor {
     
     setDisabledState(val: boolean): void {
         this.disabled = val;
+        this.ariaLbl = 'Checkbox is disabled';
     }
 }
 

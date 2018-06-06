@@ -5,6 +5,7 @@ export declare class Panel implements BlockableUI {
     toggleable: boolean;
     header: string;
     collapsed: boolean;
+    ariaLbl: string;
     style: any;
     styleClass: string;
     expandIcon: string;

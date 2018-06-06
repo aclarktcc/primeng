@@ -21,7 +21,7 @@ import {BlockableUI} from '../common/blockableui';
     template: `
         <div class="ui-radiobutton ui-widget">
             <div class="ui-helper-hidden-accessible">
-                <input type="radio" [checked]="checked">
+                <input type="radio" [checked]="checked" aria-label="radio button row selector">
             </div>
             <div class="ui-radiobutton-box ui-widget ui-radiobutton-relative ui-state-default" (click)="handleClick($event)"
                         (mouseenter)="hover=true" (mouseleave)="hover=false"
@@ -49,7 +49,7 @@ export class DTRadioButton {
     template: `
         <div class="ui-chkbox ui-widget">
             <div class="ui-helper-hidden-accessible">
-                <input type="checkbox" [checked]="checked">
+                <input type="checkbox" [checked]="checked" [attr.aria-label]="ariaLbl">
             </div>
             <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" (click)="handleClick($event)"
                         (mouseover)="hover=true" (mouseout)="hover=false"
@@ -62,6 +62,8 @@ export class DTRadioButton {
 export class DTCheckbox {
     
     @Input() checked: boolean;
+
+    @Input() ariaLbl = 'Check box control';
     
     @Input() disabled: boolean;
 
@@ -72,6 +74,17 @@ export class DTCheckbox {
     handleClick(event) {
         if(!this.disabled) {
             this.onChange.emit({originalEvent: event, checked: !this.checked});
+
+            if (this.checked) {
+                this.ariaLbl = 'Checkbox is not checked';
+                
+            }
+            else if (!this.checked) {
+                this.ariaLbl = 'Checkbox is checked';
+            }
+        }
+        else if (this.disabled) {
+            this.ariaLbl = 'Checkbox is disabled';
         }
     }
 }
@@ -113,6 +126,8 @@ export class RowExpansionLoader implements OnInit, OnDestroy {
                             'ui-helper-hidden': col.hidden}"
                 (dragstart)="dt.onColumnDragStart($event)" (dragleave)="dt.onColumnDragleave($event)" (drop)="dt.onColumnDrop($event)" (mousedown)="dt.onHeaderMousedown($event,headerCell)"
                 [attr.tabindex]="col.sortable ? tabindex : null" (keydown)="dt.onHeaderKeydown($event,col)">
+                <span *ngIf="col.selectionMode=='single'" class="sr-only">{{labelTextRB}}</span>
+                <span *ngIf="col.selectionMode=='multiple'" class="sr-only">{{labelTextCkbx}}</span>
                 <span class="ui-column-resizer ui-clickable" *ngIf="dt.resizableColumns && ((dt.columnResizeMode == 'fit' && !lastCol) || dt.columnResizeMode == 'expand')" (mousedown)="dt.initColumnResize($event)"></span>
                 <span class="ui-column-title" *ngIf="!col.selectionMode&&!col.headerTemplate">{{col.header}}</span>
                 <span class="ui-column-title" *ngIf="col.headerTemplate">
@@ -123,7 +138,7 @@ export class RowExpansionLoader implements OnInit, OnDestroy {
                 <input [attr.type]="col.filterType" class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" [attr.maxlength]="col.filterMaxlength" [attr.placeholder]="col.filterPlaceholder" *ngIf="col.filter&&!col.filterTemplate" [value]="dt.filters[col.filterField||col.field] ? dt.filters[col.filterField||col.field].value : ''"
                     (click)="dt.onFilterInputClick($event)" (input)="dt.onFilterKeyup($event.target.value, col.filterField||col.field, col.filterMatchMode)"/>
                 <p-columnFilterTemplateLoader [column]="col" *ngIf="col.filterTemplate"></p-columnFilterTemplateLoader>
-                <p-dtCheckbox *ngIf="col.selectionMode=='multiple'" (onChange)="dt.toggleRowsWithCheckbox($event)" [checked]="dt.allSelected" [disabled]="dt.isEmpty()"></p-dtCheckbox>
+                <p-dtCheckbox *ngIf="col.selectionMode=='multiple'" (onChange)="dt.toggleRowsWithCheckbox($event)" [checked]="dt.allSelected" [disabled]="dt.isEmpty()" aria-label="Select all rows checkbox"></p-dtCheckbox>
             </th>
         </ng-template>
     `
@@ -133,6 +148,12 @@ export class ColumnHeaders {
     constructor(@Inject(forwardRef(() => DataTable)) public dt:DataTable) {}
     
     @Input("pColumnHeaders") columns: Column[];
+
+    @Input() labelTextCkbx="multiple select row table header";
+
+    @Input() labelTextRB="single select row table header";
+    
+
 }
 
 @Component({
@@ -201,6 +222,7 @@ export class ColumnFooters {
                         <a href="#" *ngIf="col.expander" (click)="dt.toggleRow(rowData,$event)">
                             <span class="ui-row-toggler fa fa-fw ui-clickable" [ngClass]="dt.isRowExpanded(rowData) ? dt.expandedIcon : dt.collapsedIcon"></span>
                         </a>
+                        
                         <p-dtRadioButton *ngIf="col.selectionMode=='single'" (onClick)="dt.selectRowWithRadio($event, rowData)" [checked]="dt.isSelected(rowData)"></p-dtRadioButton>
                         <p-dtCheckbox *ngIf="col.selectionMode=='multiple'" (onChange)="dt.toggleRowWithCheckbox($event,rowData)" [checked]="dt.isSelected(rowData)"></p-dtCheckbox>
                     </td>
@@ -507,8 +529,8 @@ export class ScrollableView implements AfterViewInit,AfterViewChecked,OnDestroy 
             </div>
             
             <div class="ui-column-resizer-helper ui-state-highlight" style="display:none"></div>
-            <span class="fa fa-arrow-down ui-datatable-reorder-indicator-up" style="position: absolute; display: none;"></span>
-            <span class="fa fa-arrow-up ui-datatable-reorder-indicator-down" style="position: absolute; display: none;"></span>
+            <span class="fa fa-arrow-down ui-datatable-reorder-indicator-up" style="position: absolute; display: none;" aria-label="indicator up"></span>
+            <span class="fa fa-arrow-up ui-datatable-reorder-indicator-down" style="position: absolute; display: none;" aria-label="indicator down"></span>
         </div>
     `,
     providers: [DomHandler,ObjectUtils]
@@ -672,6 +694,8 @@ export class DataTable implements AfterViewChecked,AfterViewInit,AfterContentIni
     @Input() virtualScrollDelay: number = 500;
   
     @Input() rowGroupExpandMode: string = 'multiple';
+
+    @Input() ariaLbl = 'Check box control';
     
     @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
     
@@ -1709,7 +1733,11 @@ export class DataTable implements AfterViewChecked,AfterViewInit,AfterContentIni
     }
     
     get allSelected() {
-        if(this.headerCheckboxToggleAllPages) {
+        if(this.isEmpty()) {
+            this.ariaLbl = 'Checkbox is not checked';
+            return false;
+        }
+        else if(this.headerCheckboxToggleAllPages) {
             return this.selection && this.value && this.selection.length === this.value.length;
         }
         else {
@@ -1727,6 +1755,7 @@ export class DataTable implements AfterViewChecked,AfterViewInit,AfterContentIni
             }
             return val;
         }
+
     }
 
     onFilterKeyup(value, field, matchMode) {
@@ -2383,7 +2412,9 @@ export class DataTable implements AfterViewChecked,AfterViewInit,AfterContentIni
     }
 
     isEmpty() {
+        // this.dataToRender.allSelected='false';
         return !this.dataToRender||(this.dataToRender.length == 0);
+
     }
 
     createLazyLoadMetadata(): LazyLoadEvent {

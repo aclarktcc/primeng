@@ -8,6 +8,7 @@ export declare class Checkbox implements ControlValueAccessor {
     disabled: boolean;
     binary: string;
     label: string;
+    ariaLbl: string;
     tabindex: number;
     inputId: string;
     style: any;

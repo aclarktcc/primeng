@@ -32,7 +32,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                 <div class="ui-widget-header ui-corner-all ui-multiselect-header ui-helper-clearfix" [ngClass]="{'ui-multiselect-header-no-toggleall': !showToggleAll}">
                     <div class="ui-chkbox ui-widget" *ngIf="showToggleAll">
                         <div class="ui-helper-hidden-accessible">
-                            <input #cb type="checkbox" readonly="readonly" [checked]="isAllChecked()" [attr.aria-label]="option.label">
+                            <input #cb type="checkbox" readonly="readonly" [checked]="isAllChecked()" [attr.aria-label]="ariaLblckbx">
                         </div>
                         <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':isAllChecked()}" (click)="toggleAll($event,cb)">
                             <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isAllChecked()}" aria-hidden="true"></span>
@@ -40,7 +40,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                     </div>
                     <div class="ui-multiselect-filter-container" *ngIf="filter">
                         <input #filterInput type="text" role="textbox" (input)="onFilter($event)"
-                                    class="ui-inputtext ui-widget ui-state-default ui-corner-all">
+                                    class="ui-inputtext ui-widget ui-state-default ui-corner-all" aria-label="multi select input">
                         <span class="fa fa-fw fa-search" aria-label="search icon"></span>
                     </div>
                     <a class="ui-multiselect-close ui-corner-all" href="#" (click)="close($event)" aria-label="Click here to close">
@@ -53,7 +53,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
                             [style.display]="isItemVisible(option) ? 'block' : 'none'" [ngClass]="{'ui-state-highlight':isSelected(option.value)}">
                             <div class="ui-chkbox ui-widget">
                                 <div class="ui-helper-hidden-accessible">
-                                    <input type="checkbox" readonly="readonly" [checked]="isSelected(option.value)">
+                                    <input type="checkbox" readonly="readonly" [checked]="isSelected(option.value)" [attr.aria-label]="ariaLbl">
                                 </div>
                                 <div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default" [ngClass]="{'ui-state-active':isSelected(option.value)}">
                                     <span class="ui-chkbox-icon ui-clickable" [ngClass]="{'fa fa-check':isSelected(option.value)}" aria-hidden="true"></span>
@@ -76,6 +76,10 @@ export class MultiSelect implements OnInit,AfterViewInit,AfterContentInit,AfterV
     @Input() scrollHeight: string = '200px';
     
     @Input() defaultLabel: string = 'Choose';
+
+    @Input() ariaLblckbx = 'Select All Check box control';
+
+    @Input() ariaLbl = 'Check box control';
 
     @Input() style: any;
 
@@ -249,6 +253,8 @@ export class MultiSelect implements OnInit,AfterViewInit,AfterContentInit,AfterV
     isSelected(value) {
         return this.findSelectionIndex(value) != -1;
     }
+
+    
     
     findSelectionIndex(val: any): number {
         let index = -1;
@@ -284,10 +290,12 @@ export class MultiSelect implements OnInit,AfterViewInit,AfterContentInit,AfterV
     } 
     
     isAllChecked() {
-        if(this.filterValue && this.filterValue.trim().length)
+        if(this.filterValue && this.filterValue.trim().length) {
             return this.value&&this.visibleOptions&&this.visibleOptions.length&&(this.value.length == this.visibleOptions.length);
-        else
+        }
+        else {
             return this.value&&this.options&&(this.value.length == this.options.length);
+        }
     } 
     
     show() {

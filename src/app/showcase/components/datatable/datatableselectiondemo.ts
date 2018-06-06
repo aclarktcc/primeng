@@ -28,6 +28,7 @@ export class DataTableSelectionDemo implements OnInit {
 
     ngOnInit() {
         this.carService.getCarsSmall().then(cars => this.cars = cars);
+        // this.cars = [];
     }
 
     onRowSelect(event) {

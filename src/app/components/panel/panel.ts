@@ -12,8 +12,8 @@ import {trigger,state,style,transition,animate} from '@angular/animations';
                 <span class="ui-panel-title" *ngIf="header">{{header}}</span>
                 <ng-content select="p-header"></ng-content>
                 <a *ngIf="toggleable" class="ui-panel-titlebar-icon ui-panel-titlebar-toggler ui-corner-all ui-state-default" href="#"
-                    (click)="toggle($event)">
-                    <span [class]="collapsed ? 'fa fa-fw ' + expandIcon : 'fa fa-fw ' + collapseIcon"></span>
+                    (click)="toggle($event)" [attr.aria-label]="ariaLbl">
+                    <span [class]="collapsed ? 'fa fa-fw ' + expandIcon : 'fa fa-fw ' + collapseIcon" aria-hidden="true"></span>
                 </a>
             </div>
             <div class="ui-panel-content-wrapper" [@panelContent]="collapsed ? 'hidden' : 'visible'" (@panelContent.done)="onToggleDone($event)"
@@ -47,6 +47,8 @@ export class Panel implements BlockableUI {
     @Input() header: string;
 
     @Input() collapsed: boolean = false;
+
+    @Input() ariaLbl: string = 'Collapsible panel control';
     
     @Input() style: any;
     
@@ -91,11 +93,13 @@ export class Panel implements BlockableUI {
     expand(event) {
         this.collapsed = false;
         this.collapsedChange.emit(this.collapsed);
+        this.ariaLbl = 'Panel expanded - click here to collapse panel';
     }
     
     collapse(event) {
         this.collapsed = true;
         this.collapsedChange.emit(this.collapsed);
+        this.ariaLbl = 'Panel collapsed - click here to expand panel';
     }
     
     getBlockableElement(): HTMLElement {

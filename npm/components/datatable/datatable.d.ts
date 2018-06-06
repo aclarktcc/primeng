@@ -15,6 +15,7 @@ export declare class DTRadioButton {
 }
 export declare class DTCheckbox {
     checked: boolean;
+    ariaLbl: string;
     disabled: boolean;
     onChange: EventEmitter<any>;
     hover: boolean;
@@ -34,6 +35,8 @@ export declare class ColumnHeaders {
     dt: DataTable;
     constructor(dt: DataTable);
     columns: Column[];
+    labelTextCkbx: string;
+    labelTextRB: string;
 }
 export declare class ColumnFooters {
     dt: DataTable;
@@ -180,6 +183,7 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     enableLoader: boolean;
     virtualScrollDelay: number;
     rowGroupExpandMode: string;
+    ariaLbl: string;
     valueChange: EventEmitter<any[]>;
     firstChange: EventEmitter<number>;
     onRowExpand: EventEmitter<any>;

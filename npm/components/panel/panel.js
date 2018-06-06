@@ -8,6 +8,7 @@ var Panel = (function () {
     function Panel(el) {
         this.el = el;
         this.collapsed = false;
+        this.ariaLbl = 'Collapsible panel control';
         this.expandIcon = 'fa-plus';
         this.collapseIcon = 'fa-minus';
         this.showHeader = true;
@@ -32,10 +33,12 @@ var Panel = (function () {
     Panel.prototype.expand = function (event) {
         this.collapsed = false;
         this.collapsedChange.emit(this.collapsed);
+        this.ariaLbl = 'Panel expanded - click here to collapse panel';
     };
     Panel.prototype.collapse = function (event) {
         this.collapsed = true;
         this.collapsedChange.emit(this.collapsed);
+        this.ariaLbl = 'Panel collapsed - click here to expand panel';
     };
     Panel.prototype.getBlockableElement = function () {
         return this.el.nativeElement.children[0];
@@ -49,7 +52,7 @@ var Panel = (function () {
 Panel.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'p-panel',
-                template: "\n        <div [ngClass]=\"'ui-panel ui-widget ui-widget-content ui-corner-all'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all\" *ngIf=\"showHeader\">\n                <span class=\"ui-panel-title\" *ngIf=\"header\">{{header}}</span>\n                <ng-content select=\"p-header\"></ng-content>\n                <a *ngIf=\"toggleable\" class=\"ui-panel-titlebar-icon ui-panel-titlebar-toggler ui-corner-all ui-state-default\" href=\"#\"\n                    (click)=\"toggle($event)\">\n                    <span [class]=\"collapsed ? 'fa fa-fw ' + expandIcon : 'fa fa-fw ' + collapseIcon\"></span>\n                </a>\n            </div>\n            <div class=\"ui-panel-content-wrapper\" [@panelContent]=\"collapsed ? 'hidden' : 'visible'\" (@panelContent.done)=\"onToggleDone($event)\"\n                [ngClass]=\"{'ui-panel-content-wrapper-overflown': collapsed||animating}\">\n                <div class=\"ui-panel-content ui-widget-content\">\n                    <ng-content></ng-content>\n                </div>\n                \n                <div class=\"ui-panel-footer ui-widget-content\" *ngIf=\"footerFacet\">\n                    <ng-content select=\"p-footer\"></ng-content>\n                </div>\n            </div>\n        </div>\n    ",
+                template: "\n        <div [ngClass]=\"'ui-panel ui-widget ui-widget-content ui-corner-all'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all\" *ngIf=\"showHeader\">\n                <span class=\"ui-panel-title\" *ngIf=\"header\">{{header}}</span>\n                <ng-content select=\"p-header\"></ng-content>\n                <a *ngIf=\"toggleable\" class=\"ui-panel-titlebar-icon ui-panel-titlebar-toggler ui-corner-all ui-state-default\" href=\"#\"\n                    (click)=\"toggle($event)\" [attr.aria-label]=\"ariaLbl\">\n                    <span [class]=\"collapsed ? 'fa fa-fw ' + expandIcon : 'fa fa-fw ' + collapseIcon\" aria-hidden=\"true\"></span>\n                </a>\n            </div>\n            <div class=\"ui-panel-content-wrapper\" [@panelContent]=\"collapsed ? 'hidden' : 'visible'\" (@panelContent.done)=\"onToggleDone($event)\"\n                [ngClass]=\"{'ui-panel-content-wrapper-overflown': collapsed||animating}\">\n                <div class=\"ui-panel-content ui-widget-content\">\n                    <ng-content></ng-content>\n                </div>\n                \n                <div class=\"ui-panel-footer ui-widget-content\" *ngIf=\"footerFacet\">\n                    <ng-content select=\"p-footer\"></ng-content>\n                </div>\n            </div>\n        </div>\n    ",
                 animations: [
                     animations_1.trigger('panelContent', [
                         animations_1.state('hidden', animations_1.style({
@@ -71,6 +74,7 @@ Panel.propDecorators = {
     'toggleable': [{ type: core_1.Input },],
     'header': [{ type: core_1.Input },],
     'collapsed': [{ type: core_1.Input },],
+    'ariaLbl': [{ type: core_1.Input },],
     'style': [{ type: core_1.Input },],
     'styleClass': [{ type: core_1.Input },],
     'expandIcon': [{ type: core_1.Input },],
