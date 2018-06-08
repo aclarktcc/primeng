@@ -1,6 +1,6 @@
 {
   "name": "tcc-primeng",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "description": "TCC's Fork of PrimeNG",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
