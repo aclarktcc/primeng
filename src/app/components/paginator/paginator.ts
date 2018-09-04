@@ -26,7 +26,7 @@ import {CommonModule} from '@angular/common';
                     (click)="changePageToLast($event)" [ngClass]="{'ui-state-disabled':isLastPage()}" [tabindex]="isLastPage() ? -1 : null" aria-label="Skip to the last page of results">
                 <span class="fa fa-step-forward" aria-hidden="true"></span>
             </a>
-            <select class="ui-paginator-rpp-options ui-widget ui-state-default" *ngIf="rowsPerPageOptions" (change)="onRppChange($event)" aria-label="dropdown menu to select how many results per page to show in data grid">
+            <select class="ui-paginator-rpp-options ui-widget ui-state-default" *ngIf="rowsPerPageOptions" (change)="onRppChange($event)" aria-label="dropdown menu to select how many results per page to show" title="Select how many results per page to show.">
                 <option *ngFor="let opt of rowsPerPageOptions" [value]="opt" [selected]="rows == opt">{{opt}}</option>
             </select>
         </div>

@@ -1503,15 +1503,17 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datatable .ui-selection-column .ui-chkbox,
 .ui-datatable .ui-selection-column .ui-radiobutton {
-     margin: 0;
-     display: block;
+     margin: auto;
+     display: inline-block;
+     vertical-align: middle;
 }
 
 .ui-datatable .ui-selection-column .ui-chkbox-box,
 .ui-datatable .ui-selection-column .ui-radiobutton-box {
-    display: block;
+    display: inline-block;
     box-sizing: border-box;
-    margin: 0;
+    margin: auto;
+    vertical-align: middle;
 }
 
 .ui-datatable-scrollable-wrapper {

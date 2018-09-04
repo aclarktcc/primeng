@@ -16,10 +16,14 @@ export const INPUTSWITCH_VALUE_ACCESSOR: any = {
             'ui-state-disabled': disabled,'ui-inputswitch-checked':checked, 'ui-state-focus':focused}" (click)="toggle($event, in)"
             [ngStyle]="style" [class]="styleClass">
             <div class="ui-inputswitch-off">
+                <span class="iconOff" aria-hidden="true"></span>
                 <span class="ui-inputswitch-offlabel">{{offLabel}}</span>
+                <span class="iconOff" aria-hidden="true"></span>
             </div>
             <div class="ui-inputswitch-on">
+                <span class="iconOn" aria-hidden="true"></span>
                 <span class="ui-inputswitch-onlabel">{{onLabel}}</span>
+                <span class="iconOn" aria-hidden="true"></span>
             </div>
             <div [ngClass]="{'ui-inputswitch-handle ui-state-default':true, 'ui-state-focus':focused}"></div>
             <div class="ui-helper-hidden-accessible">
